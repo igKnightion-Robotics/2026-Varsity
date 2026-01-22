@@ -13,18 +13,20 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import java.util.function.DoubleSupplier;
+
+
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -37,11 +39,31 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+
+
+  // Controller
+  public static final Joystick leftController = new Joystick(1);
+  public static final Joystick rightController = new Joystick(0);
+
+
+
+
+    // Drive suppliers
+  DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
+  DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
+  DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
+  DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
+
+
+
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -52,12 +74,20 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
+
+
+
   }
+
+
+
+
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -69,17 +99,10 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-        .onTrue(new InstantCommand(
-            () -> m_robotDrive.zeroHeading(),
-            m_robotDrive));
+     // Default command, normal field-relative drive
+    // Joystick drive command (driver and operator)
+    
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

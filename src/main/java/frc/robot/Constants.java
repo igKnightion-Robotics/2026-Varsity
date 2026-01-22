@@ -9,6 +9,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
+
+
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -58,6 +61,20 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
   }
+
+
+//Added stuff to do with joystick deadband, unsure?
+
+
+ // Joystick Deadband
+    public static final double DEADBAND = 0.75;
+    public static final double LEFT_Y_DEADBAND = 0.1;
+    public static final double RIGHT_X_DEADBAND = 0.1;
+    public static final double TURN_CONSTANT = 6;
+
+
+
+
 
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
