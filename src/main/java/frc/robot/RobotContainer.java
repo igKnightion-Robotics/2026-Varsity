@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
+import frc.robot.subsystems.ShooterSystem;
+
 
 
 
@@ -98,10 +100,21 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
+
+
+
   private void configureButtonBindings() {
      // Default command, normal field-relative drive
     // Joystick drive command (driver and operator)
-    
+
+
+    //Shooter Buttons and Intake Buttons
+    new JoystickButton(rightController, 1);
+
+
+
+
+
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
