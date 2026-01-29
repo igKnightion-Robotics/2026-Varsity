@@ -18,6 +18,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -49,6 +50,7 @@ public class RobotContainer {
   public static final Joystick rightController = new Joystick(0);
   
     public static final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
+    public static final IntakeSubsystem m_intakeMotor = new IntakeSubsystem();
   
   
   
@@ -102,6 +104,9 @@ public class RobotContainer {
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
         .whileTrue(m_shooterMotor.runShooter());
+
+      new JoystickButton(leftController, 1)
+        .whileTrue(m_intakeMotor.runIntake());
 
   }
   /**
