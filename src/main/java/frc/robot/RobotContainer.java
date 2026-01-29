@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
-import frc.robot.subsystems.ShooterSystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 
 
@@ -47,73 +47,61 @@ public class RobotContainer {
   // Controller
   public static final Joystick leftController = new Joystick(1);
   public static final Joystick rightController = new Joystick(0);
+  
+    public static final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
+  
+  
+  
+  
+      // Drive suppliers
+    DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
+    DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
+    DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
+    DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
+  
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
 
-
-
-
-    // Drive suppliers
-  DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
-  DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
-  DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
-  DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
-
-
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-
-
-
-
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
-    // Configure default commands
-    m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
-                true),
-            m_robotDrive));
-
-
-
-  }
-
-
-
-
-
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
-   */
-
-
-
-  private void configureButtonBindings() {
-     // Default command, normal field-relative drive
-    // Joystick drive command (driver and operator)
-
-
-    //Shooter Buttons and Intake Buttons
-    new JoystickButton(rightController, 1);
-
-
-
-
+  
+    public RobotContainer() {
+      // Configure the button bindings
+      configureButtonBindings();
+  
+      // Configure default commands
+      m_robotDrive.setDefaultCommand(
+          // The left stick controls translation of the robot.
+          // Turning is controlled by the X axis of the right stick.
+          new RunCommand(
+              () -> m_robotDrive.drive(
+                  -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
+                  -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
+                  -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
+                  true),
+              m_robotDrive));
+    }
+  
+  
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+     * subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * passing it to a
+     * {@link JoystickButton}.
+     */
+  
+  
+  
+    private void configureButtonBindings() {
+       // Default command, normal field-relative drive
+      // Joystick drive command (driver and operator)
+  
+  
+      //Shooter Buttons and Intake Buttons
+      new JoystickButton(rightController, 1)
+        .whileTrue(m_shooterMotor.runShooter());
 
   }
   /**

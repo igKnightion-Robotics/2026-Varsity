@@ -59,10 +59,17 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 13;
     public static final int kRearRightTurningCanId = 17;
 
-    public static final int kShooterCanId = 18;
-    public static final int kIntakeCanId = 19;
 
     public static final boolean kGyroReversed = false;
+  }
+  public static final class ShooterConstants {
+    public static final double kShooterSpeed = 0.75;
+    public static final int kShooterCanId = 18;
+  }
+
+  public static final class IntakeConstants {
+    public static final double kIntakeSpeed = 0.5;
+    public static final int kIntakeCanId = 19;
   }
 
 
@@ -74,6 +81,7 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
+
 
 
 
