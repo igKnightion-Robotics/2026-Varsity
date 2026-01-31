@@ -39,8 +39,8 @@ import frc.robot.subsystems.ShooterSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+// drive subsytem was private before
   // The driver's controller
 
 
