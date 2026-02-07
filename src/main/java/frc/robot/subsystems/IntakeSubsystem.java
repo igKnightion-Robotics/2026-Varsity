@@ -22,19 +22,33 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeSubsystem extends SubsystemBase {
 
     private final SparkFlex m_intakeMotor;
+   private final SparkFlex m_flipperMotor;
+   
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
   m_intakeMotor = new SparkFlex(IntakeConstants.kIntakeCanId, SparkFlex.MotorType.kBrushless);
-    SparkFlexConfig config = new SparkFlexConfig();
-    config.idleMode(IdleMode.kCoast);
-  
+  SparkFlexConfig intakeConfig = new SparkFlexConfig();
+  intakeConfig.idleMode(IdleMode.kCoast);
 
-      m_intakeMotor.configure(
-        config,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters
-        );
-  }
+  m_intakeMotor.configure(
+      intakeConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
+
+//flipper motor configuring
+
+  m_flipperMotor = new SparkFlex(IntakeConstants.kFlipperCanId, SparkFlex.MotorType.kBrushless);
+  SparkFlexConfig flipperConfig = new SparkFlexConfig();
+  flipperConfig.idleMode(IdleMode.kBrake);
+
+  m_flipperMotor.configure(
+      flipperConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters);
+}
+
+
+
 
   public void setIntakeSpeed(double speed) {
     m_intakeMotor.set(speed);
