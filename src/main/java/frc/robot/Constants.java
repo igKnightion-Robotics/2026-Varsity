@@ -28,7 +28,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 1.2; //4.8 before
+    public static final double kMaxSpeedMetersPerSecond = 2.4; //4.8 before
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
@@ -70,8 +70,14 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final double kIntakeSpeed = 0.5;
     public static final int kIntakeCanId = 19;
+    public static final int kFlipperCanId = 20;
   }
 
+  //Flipper set points will need to be adjusted, these are just placeholders
+    public static final class IntakeSetpoints {
+      public static final double kStow = -4.178;
+    public static final double kFeeding = -3.5;
+    }
 
 //Added stuff to do with joystick deadband, unsure?
 

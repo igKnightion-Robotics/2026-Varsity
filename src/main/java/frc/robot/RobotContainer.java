@@ -51,6 +51,7 @@ public class RobotContainer {
   
     public static final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
     public static final IntakeSubsystem m_intakeMotor = new IntakeSubsystem();
+    public static final IntakeSubsystem m_flipperMotor = new IntakeSubsystem();
   
   
   
@@ -107,6 +108,7 @@ public class RobotContainer {
 
       new JoystickButton(leftController, 1)
         .whileTrue(m_intakeMotor.runIntake());
+        // .whileTrue(m_flipperMotor.runIntake);
 
       new JoystickButton(rightController, 2)
         .whileTrue(m_robotDrive.limeLightAim(
