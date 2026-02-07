@@ -108,6 +108,16 @@ public class RobotContainer {
       new JoystickButton(leftController, 1)
         .whileTrue(m_intakeMotor.runIntake());
 
+      new JoystickButton(rightController, 2)
+        .whileTrue(m_robotDrive.limeLightAim(
+          () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
+          () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); },
+          () -> { return -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband); }
+        ));
+
+      // new JoystickButton(leftController, buttonNumber:5)
+      //.whileTrue();
+
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
