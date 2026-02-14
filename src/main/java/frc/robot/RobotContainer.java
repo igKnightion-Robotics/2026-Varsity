@@ -49,9 +49,8 @@ public class RobotContainer {
   public static final Joystick leftController = new Joystick(1);
   public static final Joystick rightController = new Joystick(0);
   
-    public static final ShooterSubsystem m_shooterMotor = new ShooterSubsystem();
-    public static final IntakeSubsystem m_intakeMotor = new IntakeSubsystem();
-    public static final IntakeSubsystem m_flipperMotor = new IntakeSubsystem();
+    public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
+    public static final IntakeSubsystem m_intake = new IntakeSubsystem();
   
   
   
@@ -104,10 +103,10 @@ public class RobotContainer {
   
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
-        .whileTrue(m_shooterMotor.runShooter());
+        .whileTrue(m_shooter.runShooter());
 
       new JoystickButton(leftController, 1)
-        .whileTrue(m_intakeMotor.runIntake());
+        .whileTrue(m_intake.runIntake());
         // .whileTrue(m_flipperMotor.runIntake);
 
       new JoystickButton(rightController, 2)

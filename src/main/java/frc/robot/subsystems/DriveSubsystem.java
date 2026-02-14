@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -25,9 +26,12 @@ import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.studica.frc.Navx;
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -53,13 +57,29 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final Pigeon2 m_gyro = new Pigeon2(30);
+  // private final Pigeon2 m_gyro = new Pigeon2(30);
+
+
+
+  private final Navx m_gyro = new Navx(0);
 
   private final Field2d field2d = new Field2d();
 
-  private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+
+
+  private final SwerveDrivePoseEstimator m_poseEstimator;
+    private final PIDController m_limeLightAimPidController = new PIDController(0, 0, 0);
+
+  /** Creates a new DriveSubsystem. */
+  public DriveSubsystem() {
+    // Usage reporting for MAXSwerve template
+    HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+m_gyro.enableOptionalMessages(true, true, false, false, false, true, false, false, false);
+
+zeroHeading();
+m_poseEstimator = new SwerveDrivePoseEstimator(
     DriveConstants.kDriveKinematics,
-    m_gyro.getRotation2d(),
+    getAngle(),
     new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
         m_frontRight.getPosition(),
@@ -69,13 +89,6 @@ public class DriveSubsystem extends SubsystemBase {
     new Pose2d(),
     VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
     VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
-
-    private final PIDController m_limeLightAimPidController = new PIDController(0, 0, 0);
-
-  /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
-    // Usage reporting for MAXSwerve template
-    HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     SmartDashboard.putNumber("Aiming KP", 0.02);
     SmartDashboard.putNumber("Aiming KI", 0);
     SmartDashboard.putNumber("Aiming KD", 0.0005);
@@ -84,6 +97,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("gyroAngle", getHeading());
     double aimingKP = SmartDashboard.getNumber("Aiming KP", 0);
     double aimingKI = SmartDashboard.getNumber("Aiming KI", 0);
     double aimingKD = SmartDashboard.getNumber("Aiming KD", 0);
@@ -96,8 +110,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Update the odometry in the periodic block
     m_poseEstimator.update(
-      m_gyro.getRotation2d(),
-        new SwerveModulePosition[] {
+      getAngle(),       
+      new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
@@ -125,9 +139,11 @@ public class DriveSubsystem extends SubsystemBase {
         } else {
           LimelightHelpers.SetRobotOrientation("limelight-shooter", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
           LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("limelight-shooter");
-          if(Math.abs(m_gyro.getAngularVelocityZWorld().refresh().getValueAsDouble()) > 720) {
-            doRejectUpdate = true;
-          }
+          //This jawn below gave some issues. Changed to getRotation2d().getDegrees() instead of getAnglularVel() which gave some errors, build successful
+         if (Math.abs(getHeading()) > 720) {
+    doRejectUpdate = true;
+}
+
           if (megaTag2 == null) {
             doRejectUpdate = true;
           } else if(megaTag2.tagCount == 0 ){
@@ -162,7 +178,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_poseEstimator.resetPosition(
-      m_gyro.getRotation2d(),
+     getAngle(), 
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -259,7 +275,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    m_gyro.reset();
+    m_gyro.resetYaw();
   }
 
   /**
@@ -268,7 +284,11 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
+    return MathUtil.inputModulus(m_gyro.getRotation2d().getDegrees(), -180.0, 180.0);
+  }
+  public Rotation2d getAngle() {
+    return m_gyro.getRotation2d();
+
   }
 
 

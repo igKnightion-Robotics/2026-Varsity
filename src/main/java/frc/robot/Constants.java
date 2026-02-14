@@ -12,6 +12,8 @@ import edu.wpi.first.math.util.Units;
 
 
 
+
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -73,7 +75,8 @@ public final class Constants {
     public static final int kFlipperCanId = 20;
   }
 
-  //Flipper set points will need to be adjusted, these are just placeholders
+  // Flipper set points will need to be adjusted, these are just placeholders
+  
     public static final class IntakeSetpoints {
       public static final double kStow = -4.178;
     public static final double kFeeding = -3.5;
