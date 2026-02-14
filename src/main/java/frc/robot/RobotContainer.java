@@ -110,10 +110,9 @@ public class RobotContainer {
         // .whileTrue(m_flipperMotor.runIntake);
 
       new JoystickButton(rightController, 2)
-        .whileTrue(m_robotDrive.limeLightAim(
+        .whileTrue(m_robotDrive.targetTrack(
           () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
-          () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); },
-          () -> { return -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband); }
+          () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }
         ));
 
       // new JoystickButton(leftController, buttonNumber:5)

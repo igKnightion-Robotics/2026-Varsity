@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -80,6 +82,11 @@ public final class Constants {
     public static final class IntakeSetpoints {
       public static final double kStow = -4.178;
     public static final double kFeeding = -3.5;
+    }
+
+    public static final class FieldConstants {
+      public static final Pose2d kHubLocation = new Pose2d(4.625594, 4.034536,new Rotation2d());
+
     }
 
 //Added stuff to do with joystick deadband, unsure?

@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
+import com.studica.frc.Navx;
+
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -13,25 +17,19 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.LimelightHelpers;
-import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static edu.wpi.first.units.Units.Degrees;
-
-import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix6.hardware.Pigeon2;
-import com.studica.frc.Navx;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.LimelightHelpers;
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -97,6 +95,9 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
 
   @Override
   public void periodic() {
+        Rotation2d targetAngle = headingToTarget(getPose(), FieldConstants.kHubLocation);
+
+    SmartDashboard.putNumber("targetAngle", targetAngle.getDegrees());
     SmartDashboard.putNumber("gyroAngle", getHeading());
     double aimingKP = SmartDashboard.getNumber("Aiming KP", 0);
     double aimingKI = SmartDashboard.getNumber("Aiming KI", 0);
@@ -121,7 +122,7 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
         boolean useMegaTag2 = true;
         boolean doRejectUpdate = false;
         if(!useMegaTag2) {
-          LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiRed("limelight-shooter");
+          LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shooter");
           if (megaTag1 == null) {
             doRejectUpdate = true;
           } else if (megaTag1.tagCount == 1 && megaTag1.rawFiducials.length == 1) {
@@ -138,7 +139,7 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
           }
         } else {
           LimelightHelpers.SetRobotOrientation("limelight-shooter", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-          LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("limelight-shooter");
+          LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
           //This jawn below gave some issues. Changed to getRotation2d().getDegrees() instead of getAnglularVel() which gave some errors, build successful
          if (Math.abs(getHeading()) > 720) {
     doRejectUpdate = true;
@@ -170,6 +171,19 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
   }
+
+
+  public Rotation2d headingToTarget(Pose2d robotPose, Pose2d targetPose){
+    Translation2d translation = targetPose.getTranslation().minus(robotPose.getTranslation());
+    return translation.getAngle();
+  }
+  public Rotation2d headingErrorToTarget(Pose2d robotPose, Pose2d targetPose){
+     Rotation2d targetAngle = headingToTarget(getPose(), FieldConstants.kHubLocation);
+     return targetAngle.minus(robotPose.getRotation());
+}
+  
+//4.625594m for x distance to hub
+//4.034536 for y distance to hub
 
   /**
    * Resets the odometry to the specified pose.
@@ -215,9 +229,23 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
+  public Command targetTrack(DoubleSupplier xSpeed, DoubleSupplier ySpeed){
+    return this.run(() -> {
+
+      Rotation2d targetAngleError = headingErrorToTarget(getPose(), FieldConstants.kHubLocation);
+      double rotSpeed = m_limeLightAimPidController.calculate(targetAngleError.getDegrees(), 0);
+      if (m_limeLightAimPidController.atSetpoint()){
+
+        drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true);
+      } else {
+        drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), -rotSpeed, false);
+      }
+    });
+
+  }
   public Command limeLightAim(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed) {
     return this.run(() -> {
-      LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiRed("limelight-shooter");
+      LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shooter");
       
       if(megaTag1 != null && megaTag1.tagCount > 0){
         Pose2d targetPose = megaTag1.pose;
