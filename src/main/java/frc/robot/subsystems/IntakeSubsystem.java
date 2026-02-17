@@ -16,14 +16,15 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.IntakeSetpoints;
 
 
 
 public class IntakeSubsystem extends SubsystemBase {
 
     private final SparkFlex m_intakeMotor;
-   private final SparkFlex m_flipperMotor;
-   
+    private final SparkFlex m_flipperMotor;
+    
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
   m_intakeMotor = new SparkFlex(IntakeConstants.kIntakeCanId, SparkFlex.MotorType.kBrushless);
@@ -57,6 +58,23 @@ public class IntakeSubsystem extends SubsystemBase {
   public Command runIntake() {
     return this.run(() -> this.setIntakeSpeed(IntakeConstants.kIntakeSpeed));
   }
+
+
+  //need to add a stow method, only goes to feeded setpoint right now, but we need to be able to stow it as well
+  public Command runFlipper() {
+    return this.run(() -> this.setIntakeSpeed(IntakeSetpoints.kFeeding));
+  } 
+  
+  public Command stowFlipper() {
+    return this.run(() -> this.setIntakeSpeed(IntakeSetpoints.kStow));
+  }
+
+  // public Command setSetpointcommand() {
+
+  // }
+
+
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

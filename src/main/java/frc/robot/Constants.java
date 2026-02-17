@@ -69,6 +69,8 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final double kShooterSpeed = 0.75;
     public static final int kShooterCanId = 18;
+    public static final int kAgitatorCanId = 21;
+    public static final double kAgitatorSpeed = 0.25;
   }
 
   public static final class IntakeConstants {
@@ -80,7 +82,7 @@ public final class Constants {
   // Flipper set points will need to be adjusted, these are just placeholders
   
     public static final class IntakeSetpoints {
-      public static final double kStow = -4.178;
+    public static final double kStow = -4.178;
     public static final double kFeeding = -3.5;
     }
 

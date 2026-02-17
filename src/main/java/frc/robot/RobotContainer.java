@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -25,6 +26,10 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import java.util.function.DoubleSupplier;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.IntakeSetpoints;
+
 
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -107,13 +112,20 @@ public class RobotContainer {
 
       new JoystickButton(leftController, 1)
         .whileTrue(m_intake.runIntake());
-        // .whileTrue(m_flipperMotor.runIntake);
 
       new JoystickButton(rightController, 2)
         .whileTrue(m_robotDrive.targetTrack(
           () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
           () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }
         ));
+
+
+        // new JoystickButton(leftController,1)
+        // .whileTrue(m_intake.setSetpointCommand(IntakeSetpoints.kFeeding));
+      
+
+        new JoystickButton(leftController, 2)
+        .toggleOnTrue(m_shooter.runAgitator());
 
       // new JoystickButton(leftController, buttonNumber:5)
       //.whileTrue();

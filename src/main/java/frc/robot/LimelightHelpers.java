@@ -1331,7 +1331,7 @@ public class LimelightHelpers {
         return toPose2D(result);
 
     }
-   
+
     /**
      * Gets the current IMU data from NetworkTables.
      * IMU data is formatted as [robotYaw, Roll, Pitch, Yaw, gyroX, gyroY, gyroZ, accelX, accelY, accelZ].

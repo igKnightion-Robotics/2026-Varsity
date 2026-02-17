@@ -140,8 +140,8 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
         } else {
           LimelightHelpers.SetRobotOrientation("limelight-shooter", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
           LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
-          //This jawn below gave some issues. Changed to getRotation2d().getDegrees() instead of getAnglularVel() which gave some errors, build successful
-         if (Math.abs(getHeading()) > 720) {
+          //This thing below gave some issues. Changed to getRotation2d().getDegrees() instead of getAnglularVel() which gave some errors, build successful
+          if (Math.abs(getHeading()) > 720) { 
     doRejectUpdate = true;
 }
 
@@ -172,14 +172,15 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
     return m_poseEstimator.getEstimatedPosition();
   }
 
+        //coordinate system
 
   public Rotation2d headingToTarget(Pose2d robotPose, Pose2d targetPose){
     Translation2d translation = targetPose.getTranslation().minus(robotPose.getTranslation());
     return translation.getAngle();
   }
   public Rotation2d headingErrorToTarget(Pose2d robotPose, Pose2d targetPose){
-     Rotation2d targetAngle = headingToTarget(getPose(), FieldConstants.kHubLocation);
-     return targetAngle.minus(robotPose.getRotation());
+      Rotation2d targetAngle = headingToTarget(getPose(), FieldConstants.kHubLocation);
+      return targetAngle.minus(robotPose.getRotation());
 }
   
 //4.625594m for x distance to hub
@@ -192,7 +193,7 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
    */
   public void resetOdometry(Pose2d pose) {
     m_poseEstimator.resetPosition(
-     getAngle(), 
+      getAngle(), 
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -220,7 +221,7 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-         m_poseEstimator.getEstimatedPosition().getRotation())
+          m_poseEstimator.getEstimatedPosition().getRotation())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -236,12 +237,17 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
       double rotSpeed = m_limeLightAimPidController.calculate(targetAngleError.getDegrees(), 0);
       if (m_limeLightAimPidController.atSetpoint()){
 
+
+
+        //coordinate system
         drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true);
       } else {
         drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), -rotSpeed, false);
       }
     });
 
+
+    
   }
   public Command limeLightAim(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed) {
     return this.run(() -> {
