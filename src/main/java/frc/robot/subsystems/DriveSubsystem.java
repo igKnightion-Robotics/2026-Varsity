@@ -6,6 +6,10 @@ package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.Navx;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -23,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -90,8 +95,45 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
     SmartDashboard.putNumber("Aiming KP", 0.02);
     SmartDashboard.putNumber("Aiming KI", 0);
     SmartDashboard.putNumber("Aiming KD", 0.0005);
-    SmartDashboard.putNumber("AimingTolerance", 0.5);
+  SmartDashboard.putNumber("AimingTolerance", 0.5);
+
+  
+  // Load the RobotConfig from the GUI settings. You should probably
+  // store this in your Constants file
+  RobotConfig config;
+  try{
+    config = RobotConfig.fromGUISettings();
+  } catch (Exception e) {
+    // Handle exception as needed
+    e.printStackTrace();
+    config = null;
   }
+
+  // Configure AutoBuilder last
+  AutoBuilder.configure(
+          this::getPose, // Robot pose supplier
+          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+          new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                  new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                  new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+          ),
+          config, // The robot configuration
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements 
+  );
+}
 
   @Override
   public void periodic() {
@@ -191,7 +233,7 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetOdometry(Pose2d pose) {
+  public void resetPose(Pose2d pose) {
     m_poseEstimator.resetPosition(
       getAngle(), 
         new SwerveModulePosition[] {
@@ -230,15 +272,12 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
+
   public Command targetTrack(DoubleSupplier xSpeed, DoubleSupplier ySpeed){
     return this.run(() -> {
-
       Rotation2d targetAngleError = headingErrorToTarget(getPose(), FieldConstants.kHubLocation);
       double rotSpeed = m_limeLightAimPidController.calculate(targetAngleError.getDegrees(), 0);
       if (m_limeLightAimPidController.atSetpoint()){
-
-
-
         //coordinate system
         drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true);
       } else {
@@ -254,11 +293,6 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
       LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shooter");
       
       if(megaTag1 != null && megaTag1.tagCount > 0){
-        Pose2d targetPose = megaTag1.pose;
-        Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
-        // double xError = targetPose.getX() - currentPose.getX();
-        // double yError = targetPose.getY() - currentPose.getY();
-        // double rotError = targetPose.getRotation().getDegrees() - currentPose.getRotation().getDegrees();
         double rotError = LimelightHelpers.getTX("limelight-shooter");
         double rotSpeed = m_limeLightAimPidController.calculate(rotError, 0);
     
@@ -325,6 +359,22 @@ m_poseEstimator = new SwerveDrivePoseEstimator(
 
   }
 
-
-  
+private ChassisSpeeds getRobotRelativeSpeeds() {
+  SwerveModuleState[] measuredStates = new SwerveModuleState[] {
+    m_frontLeft.getState(),
+    m_frontRight.getState(),
+    m_rearLeft.getState(),
+    m_rearRight.getState()
+  };
+  return DriveConstants.kDriveKinematics.toChassisSpeeds(measuredStates);
+}
+private void driveRobotRelative(ChassisSpeeds speeds) {
+  var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+  SwerveDriveKinematics.desaturateWheelSpeeds(
+      swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+  m_frontLeft.setDesiredState(swerveModuleStates[0]);
+  m_frontRight.setDesiredState(swerveModuleStates[1]);
+  m_rearLeft.setDesiredState(swerveModuleStates[2]);
+  m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
 }
