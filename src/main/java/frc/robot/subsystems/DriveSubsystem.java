@@ -77,7 +77,11 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
-m_gyro.enableOptionalMessages(true, true, false, false, false, true, false, false, false);
+
+    
+m_gyro.enableOptionalMessages(true, true, false, false, false, true, false, false, false, false);
+//error here, added arguments to fix, change later?
+
 
 zeroHeading();
 m_poseEstimator = new SwerveDrivePoseEstimator(

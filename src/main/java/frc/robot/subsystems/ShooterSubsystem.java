@@ -16,6 +16,7 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
 
   private final SparkFlex m_shooterMotor;
+  private final SparkFlex m_shooter2Motor;
   private final SparkFlex m_agitatorMotor;
 
   public ShooterSubsystem() {
@@ -25,6 +26,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
   m_shooterMotor.configure(
       shooterConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters
+      );
+
+
+
+    m_shooter2Motor = new SparkFlex(ShooterConstants.kShooter2CanId, SparkFlex.MotorType.kBrushless);
+  SparkFlexConfig shooter2Config = new SparkFlexConfig();
+  shooter2Config.idleMode(IdleMode.kCoast);
+
+  m_shooter2Motor.configure(
+      shooter2Config,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
       );
@@ -47,8 +60,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooterSpeed(double speed) {
     m_shooterMotor.set(speed);
   }
-
-    public void setAgitatorSpeed(double speed) {
+  public void setShooter2Speed(double speed) {
+  m_shooter2Motor.set(speed);
+  }
+  public void setAgitatorSpeed(double speed) {
     m_agitatorMotor.set(speed);
   }
 
@@ -58,8 +73,12 @@ public class ShooterSubsystem extends SubsystemBase {
     return this.run(() -> this.setShooterSpeed(ShooterConstants.kShooterSpeed));
   }
 
+  public Command runShooter2() {
+    return this.run(() -> this.setShooter2Speed(ShooterConstants.kShooter2Speed));
+  }
+
   public Command runAgitator() {
-    return this.run(() -> this.setShooterSpeed(ShooterConstants.kAgitatorSpeed));
+    return this.run(() -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed));
   }
 
 

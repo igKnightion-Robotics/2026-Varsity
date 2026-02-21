@@ -13,9 +13,11 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.DoubleSupplier;
+import frc.robot.Constants.IntakeSetpoints;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -98,10 +100,21 @@ public class RobotContainer {
   
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
-        .whileTrue(m_shooter.runShooter());
+        .whileTrue(      
+          new ParallelCommandGroup(
+            m_shooter.runShooter(),
+            m_shooter.runShooter2(),
+            m_shooter.runAgitator()
+        )
+        );
 
       new JoystickButton(leftController, 1)
-        .whileTrue(m_intake.runIntake());
+        .whileTrue(  
+          new ParallelCommandGroup(
+            m_intake.runIntake(),
+            m_intake.feedFlipper()
+            ));
+
 
       new JoystickButton(rightController, 2)
         .whileTrue(m_robotDrive.targetTrack(
@@ -110,15 +123,10 @@ public class RobotContainer {
         ));
 
 
-        // new JoystickButton(leftController,1)
-        // .whileTrue(m_intake.setSetpointCommand(IntakeSetpoints.kFeeding));
-      
+      new JoystickButton(leftController, 4)
+        .whileTrue(m_intake.stowFlipper());
 
-        new JoystickButton(leftController, 2)
-        .toggleOnTrue(m_shooter.runAgitator());
 
-      // new JoystickButton(leftController, buttonNumber:5)
-      //.whileTrue();
 
   }
   /**

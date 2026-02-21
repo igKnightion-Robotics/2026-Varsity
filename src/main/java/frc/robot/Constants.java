@@ -69,20 +69,23 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final double kShooterSpeed = 0.75;
     public static final int kShooterCanId = 18;
+    public static final int kShooter2CanId = 22;
+    public static final double kShooter2Speed = -0.75;
     public static final int kAgitatorCanId = 21;
-    public static final double kAgitatorSpeed = 0.25;
+    public static final double kAgitatorSpeed = 0.45;
   }
 
   public static final class IntakeConstants {
-    public static final double kIntakeSpeed = 0.5;
+    public static final double kIntakeSpeed = 0.65;
     public static final int kIntakeCanId = 19;
     public static final int kFlipperCanId = 20;
+    public static final double kFlipperSpeed = 0.35;
   }
 
   // Flipper set points will need to be adjusted, these are just placeholders
   
     public static final class IntakeSetpoints {
-    public static final double kStow = -4.178;
+    public static final double kStow = 0.0;
     public static final double kFeeding = -3.5;
     }
 
@@ -91,7 +94,6 @@ public final class Constants {
 
     }
 
-//Added stuff to do with joystick deadband, unsure?
 
 
  // Joystick Deadband

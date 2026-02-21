@@ -3,32 +3,7 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "runShooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle 3"
-          }
-        }
-      ]
+      "commands": []
     }
   },
   "resetOdom": true,
