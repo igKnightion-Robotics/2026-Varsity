@@ -9,6 +9,25 @@
           "data": {
             "pathName": "Simple Test"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "runShooter"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 8.0
+                }
+              }
+            ]
+          }
         }
       ]
     }

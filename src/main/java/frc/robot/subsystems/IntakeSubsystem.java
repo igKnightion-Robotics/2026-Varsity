@@ -14,7 +14,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeSetpoints;
@@ -93,11 +93,11 @@ m_absEncoder = m_flipperMotor.getAbsoluteEncoder();
 
 
   //i don't think this is right, but who knows?
-double gearRatio = 25.0; // 25:1 gearbox
+// double gearRatio = 25.0; // 25:1 gearbox
 
 public void setPosition(double positionDegrees) {
 
-   double motorDegrees = positionDegrees * gearRatio;
+   double motorDegrees = positionDegrees /* gearRatio*/;
 
     m_pidController.setReference(motorDegrees, ControlType.kPosition);
 }
@@ -118,5 +118,7 @@ public Command stowFlipper() {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Flipper Angle", m_absEncoder.getPosition());
+
   }
 }
