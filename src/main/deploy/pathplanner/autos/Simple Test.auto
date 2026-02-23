@@ -5,15 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Simple Test"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Simple Test"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "targetTrack"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -21,18 +27,12 @@
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 8.0
+                  "name": "stopShooter"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "targetTrack"
           }
         }
       ]

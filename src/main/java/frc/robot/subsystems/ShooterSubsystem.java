@@ -81,6 +81,14 @@ public class ShooterSubsystem extends SubsystemBase {
     return this.run(() -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed));
   }
 
+  public Command stopShooter() {
+    return this.run(() -> {
+      this.setShooterSpeed(0);
+      this.setShooter2Speed(0);
+      this.setAgitatorSpeed(0);
+    });
+  }
+
 
 
 

@@ -69,8 +69,8 @@ public class RobotContainer {
     public RobotContainer() {
       
      // Register Named Commands
-  NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
-        NamedCommands.registerCommand("runShooter", m_shooter.runShooter());
+  // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
+  //       NamedCommands.registerCommand("runShooter", m_shooter.runShooter());
         //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
         // Do all other initialization
