@@ -20,7 +20,7 @@ import java.util.function.DoubleSupplier;
 import frc.robot.Constants.IntakeSetpoints;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-
+import com.pathplanner.lib.auto.NamedCommands;
 
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -56,12 +56,26 @@ public class RobotContainer {
     DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
+
+
+        
+  
+
   
     private final SendableChooser<Command> m_autoChooser;
     
 
   
     public RobotContainer() {
+      
+     // Register Named Commands
+  NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
+        NamedCommands.registerCommand("runShooter", m_shooter.runShooter());
+        //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+
+        // Do all other initialization
+       // configureButtonBindings();
+
       m_autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", m_autoChooser);
       // Configure the button bindings
