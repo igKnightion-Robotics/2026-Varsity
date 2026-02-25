@@ -69,8 +69,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
   
-  public Command runShooter() {
-    return this.run(() -> this.setShooterSpeed(ShooterConstants.kShooterSpeed));
+  public Command runShooter() { 
+    return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kShooterSpeed), 
+    () -> this.setShooterSpeed(0));
+  }
+  public Command runShooter2() {
+    return this.startEnd(() -> this.setShooter2Speed(ShooterConstants.kShooter2Speed), 
+    () -> this.setShooter2Speed(0));
+  }
+  public Command runAgitator() {
+    return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed), 
+    () -> this.setAgitatorSpeed(0));
+  }
+
+/*  return this.run(() -> this.setShooterSpeed(Shoo
+terConstants.kShooterSpeed));
   }
 
   public Command runShooter2() {
@@ -80,10 +93,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public Command runAgitator() {
     return this.run(() -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed));
   }
-
-
-
-
+*/
 
 
 

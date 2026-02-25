@@ -17,6 +17,12 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "targetTrack"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "runShooter"
                 }
               },
@@ -30,9 +36,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "targetTrack"
+            "pathName": "Simple Test 2"
           }
         }
       ]

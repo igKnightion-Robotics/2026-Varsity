@@ -23,9 +23,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "Right3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "feedFlipper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "targetTrack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runShooter"
           }
         }
       ]

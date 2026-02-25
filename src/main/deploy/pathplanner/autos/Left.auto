@@ -17,21 +17,53 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 6.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left2"
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "Left3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "feedFlipper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "targetTrack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runShooter"
           }
         }
       ]
