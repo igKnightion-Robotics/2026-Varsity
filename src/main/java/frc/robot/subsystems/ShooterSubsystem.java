@@ -82,6 +82,23 @@ public class ShooterSubsystem extends SubsystemBase {
     () -> this.setAgitatorSpeed(0));
   }
 
+
+
+
+
+  public Command reverseShooter() { 
+    return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed), 
+    () -> this.setShooterSpeed(0));
+  }
+  public Command reverseShooter2() {
+    return this.startEnd(() -> this.setShooter2Speed(ShooterConstants.kReverseShooter2Speed), 
+    () -> this.setShooter2Speed(0));
+  }
+  public Command reverseAgitator() {
+    return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed), 
+    () -> this.setAgitatorSpeed(0));
+  }
+
 /*  return this.run(() -> this.setShooterSpeed(Shoo
 terConstants.kShooterSpeed));
   }

@@ -73,6 +73,10 @@ public final class Constants {
     public static final double kShooter2Speed = -0.75;
     public static final int kAgitatorCanId = 21;
     public static final double kAgitatorSpeed = 0.45;
+
+    public static final double kReverseShooterSpeed = -0.45;
+    public static final double kReverseShooter2Speed = 0.45;
+    public static final double kReverseAgitatorSpeed = -0.5;
   }
 
   public static final class IntakeConstants {

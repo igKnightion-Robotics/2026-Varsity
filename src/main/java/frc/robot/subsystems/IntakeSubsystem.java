@@ -84,7 +84,8 @@ m_absEncoder = m_flipperMotor.getAbsoluteEncoder();
 
 
   public Command runIntake() {
-    return this.run(() -> this.setIntakeSpeed(IntakeConstants.kFlipperSpeed));
+    return this.startEnd(() -> this.setIntakeSpeed(IntakeConstants.kFlipperSpeed)
+    , () -> this.setIntakeSpeed(0));
   }
 
 

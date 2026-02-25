@@ -72,9 +72,15 @@ public class RobotContainer {
      // Register Named Commands
   // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
         NamedCommands.registerCommand("runShooter", Commands.parallel(
-          m_shooter.runShooter().withTimeout(4.0), 
-          m_shooter.runShooter2().withTimeout(4.0), 
-          m_shooter.runAgitator().withTimeout(4.0)
+          m_shooter.runShooter().withTimeout(8.0), 
+          m_shooter.runShooter2().withTimeout(8.0), 
+          m_shooter.runAgitator().withTimeout(8.0)
+          ));
+
+        NamedCommands.registerCommand("reverseShooter", Commands.parallel(
+          m_shooter.reverseShooter().withTimeout(3.0), 
+          m_shooter.reverseShooter2().withTimeout(3.0), 
+          m_shooter.reverseAgitator().withTimeout(3.0)
           ));
         NamedCommands.registerCommand("feedFlipper", m_intake.feedFlipper().withTimeout(1.0));
         NamedCommands.registerCommand("runIntake", m_intake.runIntake().withTimeout(4.0));
@@ -135,6 +141,15 @@ public class RobotContainer {
             m_intake.runIntake(),
             m_intake.feedFlipper()
             ));
+
+      new JoystickButton(leftController, 2)
+        .whileTrue(
+          new ParallelCommandGroup(
+            m_shooter.reverseShooter(),
+            m_shooter.reverseShooter2(),
+            m_shooter.reverseAgitator()
+          )
+        );
 
 
       new JoystickButton(rightController, 2)
