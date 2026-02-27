@@ -15,29 +15,29 @@ import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  private final SparkFlex m_shooterMotor;
-  private final SparkFlex m_shooter2Motor;
+  private final SparkFlex m_shooterLeftMotor;
+  private final SparkFlex m_shooterRightMotor;
   private final SparkFlex m_agitatorMotor;
 
   public ShooterSubsystem() {
-    m_shooterMotor = new SparkFlex(ShooterConstants.kShooterCanId, SparkFlex.MotorType.kBrushless);
-  SparkFlexConfig shooterConfig = new SparkFlexConfig();
-  shooterConfig.idleMode(IdleMode.kCoast);
+    m_shooterLeftMotor = new SparkFlex(ShooterConstants.kShooterLeftCanId, SparkFlex.MotorType.kBrushless);
+  SparkFlexConfig shooterLeftConfig = new SparkFlexConfig();
+  shooterLeftConfig.idleMode(IdleMode.kCoast);
 
-  m_shooterMotor.configure(
-      shooterConfig,
+  m_shooterLeftMotor.configure(
+      shooterLeftConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
       );
 
 
 
-    m_shooter2Motor = new SparkFlex(ShooterConstants.kShooter2CanId, SparkFlex.MotorType.kBrushless);
-  SparkFlexConfig shooter2Config = new SparkFlexConfig();
-  shooter2Config.idleMode(IdleMode.kCoast);
-
-  m_shooter2Motor.configure(
-      shooter2Config,
+    m_shooterRightMotor = new SparkFlex(ShooterConstants.kShooterRightCanId, SparkFlex.MotorType.kBrushless);
+  SparkFlexConfig shooterRightConfig = new SparkFlexConfig();
+  shooterRightConfig.idleMode(IdleMode.kCoast);
+  shooterRightConfig.follow(m_shooterLeftMotor, true);
+  m_shooterRightMotor.configure(
+      shooterRightConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
       );
@@ -58,10 +58,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterSpeed(double speed) {
-    m_shooterMotor.set(speed);
-  }
-  public void setShooter2Speed(double speed) {
-  m_shooter2Motor.set(speed);
+    m_shooterLeftMotor.set(speed);
   }
   public void setAgitatorSpeed(double speed) {
     m_agitatorMotor.set(speed);
@@ -70,12 +67,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   
   public Command runShooter() { 
-    return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kShooterSpeed), 
+    return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed), 
     () -> this.setShooterSpeed(0));
-  }
-  public Command runShooter2() {
-    return this.startEnd(() -> this.setShooter2Speed(ShooterConstants.kShooter2Speed), 
-    () -> this.setShooter2Speed(0));
   }
   public Command runAgitator() {
     return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed), 
@@ -89,10 +82,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public Command reverseShooter() { 
     return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed), 
     () -> this.setShooterSpeed(0));
-  }
-  public Command reverseShooter2() {
-    return this.startEnd(() -> this.setShooter2Speed(ShooterConstants.kReverseShooter2Speed), 
-    () -> this.setShooter2Speed(0));
   }
   public Command reverseAgitator() {
     return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed), 

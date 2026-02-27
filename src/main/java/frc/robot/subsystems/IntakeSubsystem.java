@@ -16,6 +16,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeSetpoints;
 
@@ -88,10 +89,25 @@ m_absEncoder = m_flipperMotor.getAbsoluteEncoder();
     , () -> this.setIntakeSpeed(0));
   }
 
+  public Command runIntakeAndDropFlipper() {
+    return this.startEnd(
+      () -> {
+        this.setIntakeSpeed(IntakeConstants.kFlipperSpeed);
+        this.feedFlipper();
+      },
+      () -> {
+        this.setIntakeSpeed(0);
+        this.m_flipperMotor.stopMotor();
+      }
+    );
+  }
 
-
-
-
+  public Command dropFlipper() {
+    return this.startEnd(
+      this::feedFlipper,
+      () -> { this.m_flipperMotor.stopMotor(); }
+    ).until(this::isFlipperDown);
+  }
 
   //i don't think this is right, but who knows?
 // double gearRatio = 25.0; // 25:1 gearbox
@@ -104,9 +120,14 @@ public void setPosition(double positionDegrees) {
 }
 
 
-  public Command feedFlipper() {
-    return this.runOnce(() -> setPosition(IntakeSetpoints.kFeeding));
+  public void feedFlipper() {
+  setPosition(IntakeSetpoints.kFeeding);
 }
+
+  public boolean isFlipperDown(){
+    return false;
+
+  }
 
 public Command stowFlipper() {
     return this.runOnce(() -> setPosition(IntakeSetpoints.kStow));

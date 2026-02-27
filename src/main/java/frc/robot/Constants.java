@@ -67,15 +67,13 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
   }
   public static final class ShooterConstants {
-    public static final double kShooterSpeed = 0.75;
-    public static final int kShooterCanId = 18;
-    public static final int kShooter2CanId = 22;
-    public static final double kShooter2Speed = -0.75;
+    public static final int kShooterRightCanId = 18;
+    public static final int kShooterLeftCanId = 22;
+    public static final double kShooterLeftSpeed = 0.75;
     public static final int kAgitatorCanId = 21;
     public static final double kAgitatorSpeed = 0.45;
 
     public static final double kReverseShooterSpeed = -0.45;
-    public static final double kReverseShooter2Speed = 0.45;
     public static final double kReverseAgitatorSpeed = -0.5;
   }
 

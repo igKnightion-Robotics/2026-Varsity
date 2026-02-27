@@ -48,20 +48,13 @@ public class RobotContainer {
   
     public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
     public static final IntakeSubsystem m_intake = new IntakeSubsystem();
-  
-  
-  
+
   
       // Drive suppliers
     DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
     DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
-
-
-        
-  
-
   
     private final SendableChooser<Command> m_autoChooser;
     
@@ -73,17 +66,16 @@ public class RobotContainer {
   // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
         NamedCommands.registerCommand("runShooter", Commands.parallel(
           m_shooter.runShooter().withTimeout(8.0), 
-          m_shooter.runShooter2().withTimeout(8.0), 
           m_shooter.runAgitator().withTimeout(8.0)
           ));
 
         NamedCommands.registerCommand("reverseShooter", Commands.parallel(
           m_shooter.reverseShooter().withTimeout(3.0), 
-          m_shooter.reverseShooter2().withTimeout(3.0), 
           m_shooter.reverseAgitator().withTimeout(3.0)
           ));
-        NamedCommands.registerCommand("feedFlipper", m_intake.feedFlipper().withTimeout(1.0));
-        NamedCommands.registerCommand("runIntake", m_intake.runIntake().withTimeout(4.0));
+        NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
+        NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
+        NamedCommands.registerCommand("runIntake", m_intake.runIntake());
         //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
         // Do all other initialization
@@ -130,23 +122,17 @@ public class RobotContainer {
         .whileTrue(      
           new ParallelCommandGroup(
             m_shooter.runShooter(),
-            m_shooter.runShooter2(),
             m_shooter.runAgitator()
         )
         );
 
       new JoystickButton(leftController, 1)
-        .whileTrue(  
-          new ParallelCommandGroup(
-            m_intake.runIntake(),
-            m_intake.feedFlipper()
-            ));
+        .whileTrue(m_intake.runIntakeAndDropFlipper());
 
       new JoystickButton(leftController, 2)
         .whileTrue(
           new ParallelCommandGroup(
             m_shooter.reverseShooter(),
-            m_shooter.reverseShooter2(),
             m_shooter.reverseAgitator()
           )
         );
