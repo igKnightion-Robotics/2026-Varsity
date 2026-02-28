@@ -64,15 +64,8 @@ public class RobotContainer {
       
      // Register Named Commands
   // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
-        NamedCommands.registerCommand("runShooter", Commands.parallel(
-          m_shooter.runShooter().withTimeout(8.0), 
-          m_shooter.runAgitator().withTimeout(8.0)
-          ));
-
-        NamedCommands.registerCommand("reverseShooter", Commands.parallel(
-          m_shooter.reverseShooter().withTimeout(3.0), 
-          m_shooter.reverseAgitator().withTimeout(3.0)
-          ));
+        NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
+        NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
         NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
         NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
         NamedCommands.registerCommand("runIntake", m_intake.runIntake());
@@ -97,6 +90,8 @@ public class RobotContainer {
                   -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
                   true),
               m_robotDrive));
+
+      m_intake.setDefaultCommand(m_intake.dropFlipper());
     }
   
   
@@ -119,23 +114,13 @@ public class RobotContainer {
   
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
-        .whileTrue(      
-          new ParallelCommandGroup(
-            m_shooter.runShooter(),
-            m_shooter.runAgitator()
-        )
-        );
+        .whileTrue(m_shooter.runShooterAndAgitate());
 
       new JoystickButton(leftController, 1)
         .whileTrue(m_intake.runIntakeAndDropFlipper());
 
       new JoystickButton(leftController, 2)
-        .whileTrue(
-          new ParallelCommandGroup(
-            m_shooter.reverseShooter(),
-            m_shooter.reverseAgitator()
-          )
-        );
+        .whileTrue(m_shooter.reverseShooterAndAgitate());
 
 
       new JoystickButton(rightController, 2)
@@ -146,8 +131,7 @@ public class RobotContainer {
 
 
       new JoystickButton(leftController, 4)
-        .whileTrue(m_intake.stowFlipper());
-
+        .toggleOnTrue(m_intake.stowFlipper());
 
 
   }
