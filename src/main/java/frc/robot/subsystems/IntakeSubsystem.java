@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeSetpoints;
+import frc.robot.Constants.ShooterConstants;
+
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
@@ -91,6 +93,11 @@ public class IntakeSubsystem extends SubsystemBase {
         this.m_flipperMotor.stopMotor();
       }
     );
+  }
+
+  public Command reverseIntake() {
+    return this.startEnd(() -> this.setIntakeSpeed(IntakeConstants.kReverseIntakeSpeed), 
+    () -> this.setIntakeSpeed(0));
   }
 
   public Command dropFlipper() {

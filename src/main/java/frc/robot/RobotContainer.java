@@ -117,9 +117,9 @@ public class RobotContainer {
         .whileTrue(m_shooter.runShooterAndAgitate());
 
       new JoystickButton(leftController, 1)
-        .whileTrue(m_intake.runIntakeAndDropFlipper());
+        .toggleOnTrue(m_intake.runIntakeAndDropFlipper());
 
-      new JoystickButton(leftController, 2)
+      new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
 
 
@@ -133,6 +133,9 @@ public class RobotContainer {
       new JoystickButton(leftController, 4)
         .toggleOnTrue(m_intake.stowFlipper());
 
+      new JoystickButton(leftController, 2)
+        .whileTrue(m_intake.reverseIntake());
+    
 
   }
   /**

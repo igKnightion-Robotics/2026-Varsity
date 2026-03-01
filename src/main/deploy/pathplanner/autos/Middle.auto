@@ -11,31 +11,57 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "runShooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle2"
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": null
+                  "name": "dropFlipper"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "reverseShooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "runShooter"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": null
+                  "name": "targetTrack"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
                 }
               }
             ]
@@ -48,22 +74,60 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle3"
+                  "pathName": "Middle 2"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "targetTrack"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "runIntake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "runShooter"
+            "pathName": "Middle 3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "targetTrack"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runShooter"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
+                }
+              }
+            ]
           }
         }
       ]
