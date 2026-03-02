@@ -78,7 +78,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public Command runIntake() {
     return this.startEnd(
-      () -> this.setIntakeSpeed(IntakeConstants.kFlipperSpeed),
+      () -> this.setIntakeSpeed(IntakeConstants.kIntakeSpeed),
       () -> this.setIntakeSpeed(0));
   }
 

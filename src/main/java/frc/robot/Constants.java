@@ -78,8 +78,8 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final double kIntakeSpeed = 0.7;
-    public static final double kReverseIntakeSpeed = 0.5;
+    public static final double kIntakeSpeed = 0.8;
+    public static final double kReverseIntakeSpeed = -0.6;
     public static final int kIntakeCanId = 19;
     public static final int kFlipperCanId = 20;
     public static final double kFlipperSpeed = 0.35;
