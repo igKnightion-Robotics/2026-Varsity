@@ -12,7 +12,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 
 
@@ -21,6 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SparkFlex m_shooterLeftMotor;
   private final SparkFlex m_shooterRightMotor;
   private final SparkFlex m_agitatorMotor;
+  private final SparkFlex m_thumperMotor;
 
   private final SparkClosedLoopController m_shooterPID;
 
@@ -65,6 +65,18 @@ public class ShooterSubsystem extends SubsystemBase {
       
       );
 
+      m_thumperMotor = new SparkFlex(ShooterConstants.kThumperCanId, SparkFlex.MotorType.kBrushless);
+
+    SparkFlexConfig thumperConfig = new SparkFlexConfig();
+  thumperConfig.idleMode(IdleMode.kCoast);
+  thumperConfig.follow(m_agitatorMotor, false);
+//We were thinking of adding setpoints to this to further agitate our hopper, but for now it just runs in a circle.
+
+  m_thumperMotor.configure(
+      thumperConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters
+      );
   }
 
   public void setShooterSpeed(double setpoint) {
@@ -73,7 +85,9 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setAgitatorSpeed(double speed) {
     m_agitatorMotor.set(speed);
   }
-
+  public void setThumperSpeed(double speed) {
+    m_thumperMotor.set(speed);
+  }
 
   
   public Command runShooter() { 
@@ -93,10 +107,12 @@ public class ShooterSubsystem extends SubsystemBase {
       () -> {
         this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed); 
         this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
+        this.setThumperSpeed(ShooterConstants.kThumperSpeed);
       },
       () -> {
         this.m_shooterLeftMotor.stopMotor();
         this.m_agitatorMotor.stopMotor();
+        this.m_thumperMotor.stopMotor();
       }
     );
   }
@@ -107,6 +123,7 @@ public class ShooterSubsystem extends SubsystemBase {
       () -> {
         this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed); 
         this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed);
+
       },
       () -> {
         this.m_shooterLeftMotor.stopMotor();
@@ -125,20 +142,6 @@ public class ShooterSubsystem extends SubsystemBase {
     return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed), 
     () -> this.setAgitatorSpeed(0));
   }
-
-/*  return this.run(() -> this.setShooterSpeed(Shoo
-terConstants.kShooterSpeed));
-  }
-
-  public Command runShooter2() {
-    return this.run(() -> this.setShooter2Speed(ShooterConstants.kShooter2Speed));
-  }
-
-  public Command runAgitator() {
-    return this.run(() -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed));
-  }
-*/
-
 
 
     @Override

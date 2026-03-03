@@ -71,10 +71,14 @@ public final class Constants {
     public static final int kShooterLeftCanId = 22;
     public static final double kShooterLeftSpeed = 4000;
     public static final int kAgitatorCanId = 21;
-    public static final double kAgitatorSpeed = -0.675;
+    public static final int kThumperCanId = 23;
+    public static final double kAgitatorSpeed = -0.5;
+    public static final double kThumperSpeed = 0.2;
+  
 
     public static final double kReverseShooterSpeed = -500;
     public static final double kReverseAgitatorSpeed = 0.5;
+
   }
 
   public static final class IntakeConstants {
@@ -93,8 +97,8 @@ public final class Constants {
     }
 
     public static final class FieldConstants {
-      public static final Pose2d kHubLocation = new Pose2d(4.625594, 4.034536,new Rotation2d());
-
+    public static final Pose2d kHubLocation = new Pose2d(4.625594, 4.034536,new Rotation2d());
+    public static final double kFieldLength = 16.4592; // meters
     }
 
 
