@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
 
@@ -29,6 +33,10 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final Supplier<Boolean> isBlueAlliance =
+      () -> DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -66,19 +74,18 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
   }
+
   public static final class ShooterConstants {
     public static final int kShooterRightCanId = 18;
     public static final int kShooterLeftCanId = 22;
-    public static final double kShooterLeftSpeed = 4000;
+    public static final double kShooterLeftSpeed = 4800;
     public static final int kAgitatorCanId = 21;
     public static final int kThumperCanId = 23;
-    public static final double kAgitatorSpeed = -0.5;
+    public static final double kAgitatorSpeed = -0.4;
     public static final double kThumperSpeed = 0.2;
-  
 
     public static final double kReverseShooterSpeed = -500;
-    public static final double kReverseAgitatorSpeed = 0.5;
-
+    public static final double kReverseAgitatorSpeed = 0.4;
   }
 
   public static final class IntakeConstants {
@@ -90,29 +97,22 @@ public final class Constants {
   }
 
   // Flipper set points will need to be adjusted, these are just placeholders
-  
-    public static final class IntakeSetpoints {
-    public static final double kStow = 0.545;
-    public static final double kFeeding = 0.80;
-    }
+  public static final class IntakeSetpoints {
+    public static final double kStow = 0.200;
+    public static final double kFeeding = 0.461;
+  }
 
-    public static final class FieldConstants {
-    public static final Pose2d kHubLocation = new Pose2d(4.625594, 4.034536,new Rotation2d());
+  public static final class FieldConstants {
+    public static final Pose2d kBlueHubLocation = new Pose2d(4.626, 4.034536, new Rotation2d());
+    public static final Pose2d kRedHubLocation = new Pose2d(11.833, 4.034536, new Rotation2d());
     public static final double kFieldLength = 16.4592; // meters
-    }
-
-
+  }
 
  // Joystick Deadband
-    public static final double DEADBAND = 0.75;
-    public static final double LEFT_Y_DEADBAND = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT = 6;
-
-
-
-
-
+  public static final double DEADBAND = 0.75;
+  public static final double LEFT_Y_DEADBAND = 0.1;
+  public static final double RIGHT_X_DEADBAND = 0.1;
+  public static final double TURN_CONSTANT = 6;
 
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,

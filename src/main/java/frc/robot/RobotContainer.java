@@ -123,7 +123,7 @@ public class RobotContainer {
         .whileTrue(m_shooter.reverseShooterAndAgitate());
 
 
-      new JoystickButton(rightController, 2)
+      new JoystickButton(rightController, 4)
         .whileTrue(m_robotDrive.targetTrack(
           () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
           () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }

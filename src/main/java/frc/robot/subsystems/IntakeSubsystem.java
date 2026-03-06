@@ -85,7 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public Command runIntakeAndDropFlipper() {
     return this.startEnd(
       () -> {
-        this.setIntakeSpeed(IntakeConstants.kFlipperSpeed);
+        this.setIntakeSpeed(IntakeConstants.kIntakeSpeed);
         this.feedFlipper();
       },
       () -> {
@@ -96,7 +96,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public Command reverseIntake() {
-    return this.startEnd(() -> this.setIntakeSpeed(IntakeConstants.kReverseIntakeSpeed), 
+    return this.startEnd(() -> this.setIntakeSpeed(IntakeConstants.kReverseIntakeSpeed),
     () -> this.setIntakeSpeed(0));
   }
 
