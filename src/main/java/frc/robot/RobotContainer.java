@@ -64,6 +64,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
       NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
+      NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
       //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
       // Do all other initialization

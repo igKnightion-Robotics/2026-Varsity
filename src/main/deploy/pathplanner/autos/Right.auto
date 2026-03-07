@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "stowFlipper"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right1"

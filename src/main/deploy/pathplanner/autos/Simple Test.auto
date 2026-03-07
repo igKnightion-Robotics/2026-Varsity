@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "stowFlipper"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Simple Test 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runShooter"
           }
         }
       ]
