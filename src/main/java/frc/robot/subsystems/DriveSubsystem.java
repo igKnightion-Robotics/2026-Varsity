@@ -136,13 +136,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!RobotState.isEnabled()) {
-      if(Constants.isBlueAlliance.get()){
-        resetPose(new Pose2d(3, 4.1, Rotation2d.kZero));
-      } else {
-        resetPose(new Pose2d(14,4.8, Rotation2d.k180deg));
-      }
-    }
+    // if (!RobotState.isEnabled()) {
+    //   if(Constants.isBlueAlliance.get()){
+    //     resetPose(new Pose2d(3, 4.1, Rotation2d.kZero));
+    //   } else {
+    //     resetPose(new Pose2d(14,4.8, Rotation2d.k180deg));
+    //   }
+    // }
     SmartDashboard.putNumber("gyroAngle", getAngle().getDegrees());
     double aimingKP = SmartDashboard.getNumber("Aiming KP", 0);
     double aimingKI = SmartDashboard.getNumber("Aiming KI", 0);
