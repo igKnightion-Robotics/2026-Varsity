@@ -17,7 +17,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "stowFlipper"
+                  "name": "feed"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "reverseShooter"
                 }
               }
             ]
@@ -66,9 +72,35 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "stowFlipper"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 5.0
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stowFlipper"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 2.0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               }
             ]

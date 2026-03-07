@@ -67,6 +67,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
       NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }).withTimeout(2.0));
       NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
+      NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
       //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
       // Do all other initialization
