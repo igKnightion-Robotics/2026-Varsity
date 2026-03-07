@@ -13,8 +13,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.DoubleSupplier;
@@ -45,56 +43,52 @@ public class RobotContainer {
   // Controller
   public static final Joystick leftController = new Joystick(1);
   public static final Joystick rightController = new Joystick(0);
-  
-    public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
-    public static final IntakeSubsystem m_intake = new IntakeSubsystem();
 
-  
+  public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  public static final IntakeSubsystem m_intake = new IntakeSubsystem();
+
+
       // Drive suppliers
     DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
     DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
-  
-    private final SendableChooser<Command> m_autoChooser;
-    
 
-  
+    private final SendableChooser<Command> m_autoChooser;
+
     public RobotContainer() {
-      
      // Register Named Commands
   // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
-        NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
-        NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
-        NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
-        NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
-        NamedCommands.registerCommand("runIntake", m_intake.runIntake());
-        //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+      NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
+      NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
+      NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
+      NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
+      NamedCommands.registerCommand("runIntake", m_intake.runIntake());
+      //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
-        // Do all other initialization
-       // configureButtonBindings();
+      // Do all other initialization
+      // configureButtonBindings();
 
       m_autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", m_autoChooser);
       // Configure the button bindings
       configureButtonBindings();
-  
+
       // Configure default commands
       m_robotDrive.setDefaultCommand(
           // The left stick controls translation of the robot.
           // Turning is controlled by the X axis of the right stick.
-          new RunCommand(
-              () -> m_robotDrive.drive(
-                  -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
-                  -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
-                  -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
-                  true),
-              m_robotDrive));
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
+                true),
+            m_robotDrive));
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
     }
-  
-  
+
     /**
      * Use this method to define your button->command mappings. Buttons can be
      * created by
@@ -104,14 +98,10 @@ public class RobotContainer {
      * passing it to a
      * {@link JoystickButton}.
      */
-  
-  
-  
     private void configureButtonBindings() {
        // Default command, normal field-relative drive
       // Joystick drive command (driver and operator)
-  
-  
+
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
         .whileTrue(m_shooter.runShooterAndAgitate());
@@ -135,7 +125,7 @@ public class RobotContainer {
 
       new JoystickButton(leftController, 2)
         .whileTrue(m_intake.reverseIntake());
-    
+
 
   }
   /**
@@ -145,6 +135,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_autoChooser.getSelected();
-    
+
   }
 }

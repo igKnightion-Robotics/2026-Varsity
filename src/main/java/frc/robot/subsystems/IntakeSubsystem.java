@@ -15,10 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeSetpoints;
-import frc.robot.Constants.ShooterConstants;
-
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 
@@ -31,7 +28,6 @@ public class IntakeSubsystem extends SubsystemBase {
   private SparkClosedLoopController m_pidController;
   private SparkAbsoluteEncoder m_absEncoder;
 
-    
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     m_intakeMotor = new SparkFlex(IntakeConstants.kIntakeCanId, SparkFlex.MotorType.kBrushless);
@@ -65,7 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_pidController = m_flipperMotor.getClosedLoopController();
     m_absEncoder = m_flipperMotor.getAbsoluteEncoder();
-    
+
     SmartDashboard.putNumber("Flipper Angle", m_absEncoder.getPosition());
     SmartDashboard.putBoolean("Flipper At Setpoint", isFlipperDown());
 
