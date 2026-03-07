@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "stowFlipper"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stowFlipper"
+                }
+              }
+            ]
           }
         },
         {

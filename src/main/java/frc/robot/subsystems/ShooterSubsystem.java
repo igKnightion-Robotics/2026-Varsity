@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -103,18 +104,19 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
   public Command runShooterAndAgitate() {
-    return this.startEnd(
-      () -> {
+    return Commands.sequence(
+      this.run(() -> {this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed);}).withTimeout(0.5),
+      this.run(() -> {
         this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed);
         this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
-        // this.setThumperSpeed(ShooterConstants.kThumperSpeed);
-      },
-      () -> {
-        this.m_shooterLeftMotor.stopMotor();
-        this.m_agitatorMotor.stopMotor();
-        // this.m_thumperMotor.stopMotor();
-      }
+      })
     );
+  }
+
+  public Command stopShooterAndAgitator() {
+    return this.run(() -> {
+        this.m_shooterLeftMotor.stopMotor();
+        this.m_agitatorMotor.stopMotor();});
   }
 
 

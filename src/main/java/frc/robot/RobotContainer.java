@@ -65,6 +65,8 @@ public class RobotContainer {
       NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
+      NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }).withTimeout(2.0));
+      NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
       //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
       // Do all other initialization
@@ -88,6 +90,7 @@ public class RobotContainer {
             m_robotDrive));
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
+      m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
     }
 
     /**
@@ -108,7 +111,7 @@ public class RobotContainer {
         .whileTrue(m_shooter.runShooterAndAgitate());
 
       new JoystickButton(leftController, 1)
-        .toggleOnTrue(m_intake.runIntakeAndDropFlipper());
+        .whileTrue(m_intake.runIntakeAndDropFlipper());
 
       new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
@@ -120,14 +123,11 @@ public class RobotContainer {
           () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }
         ));
 
-
       new JoystickButton(leftController, 4)
         .toggleOnTrue(m_intake.stowFlipper());
 
       new JoystickButton(leftController, 2)
         .whileTrue(m_intake.reverseIntake());
-
-
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -136,6 +136,5 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_autoChooser.getSelected();
-
   }
 }

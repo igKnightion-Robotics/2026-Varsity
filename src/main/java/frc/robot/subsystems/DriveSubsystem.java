@@ -27,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -135,6 +136,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (!RobotState.isEnabled()) {
+      if(Constants.isBlueAlliance.get()){
+        resetPose(new Pose2d(3, 4.1, Rotation2d.kZero));
+      } else {
+        resetPose(new Pose2d(14,4.8, Rotation2d.k180deg));
+      }
+    }
     SmartDashboard.putNumber("gyroAngle", getAngle().getDegrees());
     double aimingKP = SmartDashboard.getNumber("Aiming KP", 0);
     double aimingKI = SmartDashboard.getNumber("Aiming KI", 0);
@@ -302,9 +310,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Rotation2d getAngle() {
     Rotation2d angle = m_gyro.getRotation2d();
-    if (!Constants.isBlueAlliance.get()) {
-      // angle = angle.plus(Rotation2d.k180deg);
-    }
     return angle;
   }
 
