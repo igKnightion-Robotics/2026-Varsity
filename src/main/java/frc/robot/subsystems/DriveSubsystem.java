@@ -131,8 +131,6 @@ public class DriveSubsystem extends SubsystemBase {
       },
       this // Reference to this subsystem to set requirements
     );
-
-    resetPose(new Pose2d(14,4.8, Rotation2d.k180deg));
   }
 
   @Override
