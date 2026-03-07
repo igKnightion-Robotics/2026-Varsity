@@ -25,6 +25,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "dropFlipper"
+                      }
+                    },
+                    {
                       "type": "race",
                       "data": {
                         "commands": [
