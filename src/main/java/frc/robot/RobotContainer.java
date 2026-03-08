@@ -13,6 +13,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.DoubleSupplier;
@@ -73,6 +74,8 @@ public class RobotContainer {
       // Do all other initialization
       // configureButtonBindings();
 
+      LimelightHelpers.setRewindEnabled("limelight-shooter", true);
+    
       m_autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", m_autoChooser);
       // Configure the button bindings
@@ -93,6 +96,11 @@ public class RobotContainer {
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
     }
+
+    public void teleopInit(){
+      LimelightHelpers.triggerRewindCapture("limelight-shooter", 40);
+    }
+
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
@@ -117,12 +125,16 @@ public class RobotContainer {
       new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
 
-
       new JoystickButton(rightController, 4)
-        .whileTrue(m_robotDrive.targetTrack(
-          () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
-          () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }
-        ));
+        .whileTrue(Commands.either(
+          m_robotDrive.aprilTagAim(
+            () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
+            () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); },
+            () -> { return -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband); }),
+          m_robotDrive.targetTrack(
+            () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
+            () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }),
+          Constants.isBlueAlliance::get));
 
       new JoystickButton(leftController, 4)
         .toggleOnTrue(m_intake.stowFlipper());

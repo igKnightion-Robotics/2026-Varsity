@@ -136,13 +136,14 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // if (!RobotState.isEnabled()) {
-    //   if(Constants.isBlueAlliance.get()){
-    //     resetPose(new Pose2d(3, 4.1, Rotation2d.kZero));
-    //   } else {
-    //     resetPose(new Pose2d(14,4.8, Rotation2d.k180deg));
-    //   }
-    // }
+    if (Constants.isBlueAlliance.get()) {
+      int[] validTagIds = {25, 26};
+      LimelightHelpers.SetFiducialIDFiltersOverride("limelight-shooter", validTagIds);
+    } else {
+      int[] validTagIds = {};
+      LimelightHelpers.SetFiducialIDFiltersOverride("limelight-shooter", validTagIds);
+    }
+
     SmartDashboard.putNumber("gyroAngle", getAngle().getDegrees());
     double aimingKP = SmartDashboard.getNumber("Aiming KP", 0);
     double aimingKI = SmartDashboard.getNumber("Aiming KI", 0);
@@ -165,22 +166,23 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getPosition()
       });
 
-    boolean doRejectUpdate = false;
-    LimelightHelpers.SetRobotOrientation("limelight-shooter", getAngle().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
-    if (Math.abs(m_gyro.getAngularVel()[2].in(DegreesPerSecond)) > 720) {
-      doRejectUpdate = true;
-    }
+    if (!Constants.isBlueAlliance.get()) {
+      boolean doRejectUpdate = false;
+      LimelightHelpers.SetRobotOrientation("limelight-shooter", getAngle().getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
+      if (Math.abs(m_gyro.getAngularVel()[2].in(DegreesPerSecond)) > 720) {
+        doRejectUpdate = true;
+      }
 
-    if (megaTag2 == null) {
-      doRejectUpdate = true;
-    } else if(megaTag2.tagCount == 0 ){
-      doRejectUpdate = true;
-    }
-    if(!doRejectUpdate ){
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
-      m_poseEstimator.addVisionMeasurement(megaTag2.pose,
-      megaTag2.timestampSeconds);
+      if (megaTag2 == null) {
+        doRejectUpdate = true;
+      } else if(megaTag2.tagCount == 0 ){
+        doRejectUpdate = true;
+      }
+      if(!doRejectUpdate ){
+        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
+        m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
+      }
     }
 
     // adding a field map to the smart dashboard
@@ -271,6 +273,26 @@ public class DriveSubsystem extends SubsystemBase {
     });
   }
 
+  public Command aprilTagAim(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed) {
+    return this.run(() -> {
+      LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shooter");
+      
+      if(megaTag1 != null && megaTag1.tagCount > 0){
+        double rotError = LimelightHelpers.getTX("limelight-shooter");
+        double rotSpeed = m_limeLightAimPidController.calculate(rotError, 0);
+
+        // Simple proportional control for demonstration purposes
+        if (m_limeLightAimPidController.atSetpoint()){
+          drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true); 
+        } else { 
+          drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), -rotSpeed, true);
+        }
+      } else {
+        drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), zSpeed.getAsDouble(), true); // Stop if no target is found
+      }
+    });
+  }
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -310,6 +332,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Rotation2d getAngle() {
     Rotation2d angle = m_gyro.getRotation2d();
+    if (Constants.isBlueAlliance.get() && RobotState.isTeleop()){
+        angle = angle.plus(Rotation2d.k180deg);
+    }
     return angle;
   }
 
