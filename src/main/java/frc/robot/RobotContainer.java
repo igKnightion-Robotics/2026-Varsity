@@ -141,6 +141,10 @@ public class RobotContainer {
 
       new JoystickButton(leftController, 2)
         .whileTrue(m_intake.reverseIntake());
+
+      new JoystickButton(leftController, 3)
+        .whileTrue(m_robotDrive.setXCommand());
+
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

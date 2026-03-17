@@ -137,7 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (Constants.isBlueAlliance.get()) {
-      int[] validTagIds = {25, 26};
+      int[] validTagIds = {26};
       LimelightHelpers.SetFiducialIDFiltersOverride("limelight-shooter", validTagIds);
     } else {
       int[] validTagIds = {};
@@ -285,7 +285,7 @@ public class DriveSubsystem extends SubsystemBase {
         if (m_limeLightAimPidController.atSetpoint()){
           drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true); 
         } else { 
-          drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), -rotSpeed, true);
+          drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotSpeed, true);
         }
       } else {
         drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), zSpeed.getAsDouble(), true); // Stop if no target is found
@@ -301,6 +301,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
+  public Command setXCommand() {
+    return this.run(this::setX);
   }
 
   /**
@@ -333,7 +337,7 @@ public class DriveSubsystem extends SubsystemBase {
   public Rotation2d getAngle() {
     Rotation2d angle = m_gyro.getRotation2d();
     if (Constants.isBlueAlliance.get() && RobotState.isTeleop()){
-        angle = angle.plus(Rotation2d.k180deg);
+        // angle = angle.plus(Rotation2d.k180deg);
     }
     return angle;
   }

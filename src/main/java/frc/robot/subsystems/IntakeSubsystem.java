@@ -45,6 +45,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     flipperConfig.idleMode(IdleMode.kBrake);
     flipperConfig.inverted(true);
+    flipperConfig.smartCurrentLimit(40);
 
     // PID values (starting values)
     flipperConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);

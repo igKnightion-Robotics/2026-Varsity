@@ -40,14 +40,14 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 3.5; //4.8 before
+    public static final double kMaxSpeedMetersPerSecond = 4.0; //4.8 before
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(24);
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(30);
-    // Distance between front and back wheels on robot
+    // Distance between front and back wheels on robotF
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -98,8 +98,8 @@ public final class Constants {
 
   // Flipper set points will need to be adjusted, these are just placeholders
   public static final class IntakeSetpoints {
-    public static final double kStow = 0.200;
-    public static final double kFeeding = 0.461;
+    public static final double kStow = 0.535;
+    public static final double kFeeding = 0.811;
   }
 
   public static final class FieldConstants {
