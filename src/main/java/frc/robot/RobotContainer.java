@@ -63,7 +63,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
       NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
-      NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
+      //NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
       NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }).withTimeout(2.0));
