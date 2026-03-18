@@ -24,6 +24,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import frc.robot.subsystems.ShooterSubsystem;
 
+import edu.wpi.first.wpilibj.Timer;
+
 
 
 
@@ -47,6 +49,9 @@ public class RobotContainer {
 
   public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
   public static final IntakeSubsystem m_intake = new IntakeSubsystem();
+
+  private final Timer matchTimer = new Timer();
+  private final double MATCH_LENGTH = 160.0;
 
 
       // Drive suppliers
@@ -75,7 +80,7 @@ public class RobotContainer {
       // configureButtonBindings();
 
       LimelightHelpers.setRewindEnabled("limelight-shooter", true);
-    
+
       m_autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", m_autoChooser);
       // Configure the button bindings
@@ -89,7 +94,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(rightController.getZ(), OIConstants.ktwistDeadband),
                 true),
             m_robotDrive));
 
@@ -99,6 +104,9 @@ public class RobotContainer {
 
     public void teleopInit(){
       LimelightHelpers.triggerRewindCapture("limelight-shooter", 40);
+
+      matchTimer.reset();
+      matchTimer.start();
     }
 
 

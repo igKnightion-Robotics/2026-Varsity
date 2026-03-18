@@ -109,9 +109,9 @@ public final class Constants {
   }
 
  // Joystick Deadband
-  public static final double DEADBAND = 0.75;
-  public static final double LEFT_Y_DEADBAND = 0.1;
-  public static final double RIGHT_X_DEADBAND = 0.1;
+  // public static final double DEADBAND = 0.75;
+  // public static final double LEFT_Y_DEADBAND = 0.1;
+  // public static final double RIGHT_X_DEADBAND = 0.1;
   public static final double TURN_CONSTANT = 6;
 
   public static final class ModuleConstants {
@@ -133,7 +133,9 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final double kDriveDeadband = 0.08;
+
+    public static final double ktwistDeadband = 0.15;
   }
 
   public static final class AutoConstants {
