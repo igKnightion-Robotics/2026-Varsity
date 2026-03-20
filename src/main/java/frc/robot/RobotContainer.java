@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -13,6 +15,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -23,9 +26,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import frc.robot.subsystems.ShooterSubsystem;
-
 import edu.wpi.first.wpilibj.Timer;
-
 
 
 
@@ -50,10 +51,6 @@ public class RobotContainer {
   public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
   public static final IntakeSubsystem m_intake = new IntakeSubsystem();
 
-  private final Timer matchTimer = new Timer();
-  private final double MATCH_LENGTH = 160.0;
-
-
       // Drive suppliers
     DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
     DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
@@ -61,6 +58,8 @@ public class RobotContainer {
     DoubleSupplier angleY = () -> -rightController.getRawAxis(1); // Y-axis joystick
 
     private final SendableChooser<Command> m_autoChooser;
+    private boolean wasAutonomousEnabled = false;
+    private boolean hasDashboardSwitched = false;
 
     public RobotContainer() {
      // Register Named Commands
@@ -100,13 +99,12 @@ public class RobotContainer {
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
+
     }
 
     public void teleopInit(){
+      HubShiftUtil.initialize();
       LimelightHelpers.triggerRewindCapture("limelight-shooter", 40);
-
-      matchTimer.reset();
-      matchTimer.start();
     }
 
 
@@ -152,6 +150,8 @@ public class RobotContainer {
 
       new JoystickButton(leftController, 3)
         .whileTrue(m_robotDrive.setXCommand());
+      new JoystickButton(leftController, 6)
+        .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
   }
   /**
@@ -160,6 +160,29 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    wasAutonomousEnabled = true;
     return m_autoChooser.getSelected();
+  }
+
+  public void robotPeriodic() {
+    if (!DriverStation.isAutonomousEnabled() && wasAutonomousEnabled && !hasDashboardSwitched){
+      Elastic.selectTab("Teleoperated");
+      hasDashboardSwitched = true;
+    }
+    if (DriverStation.isAutonomousEnabled()) {
+      SmartDashboard.putNumber(
+        "Remaining Time In Current Shift",
+        DriverStation.getMatchTime());
+    } else {
+      SmartDashboard.putNumber(
+        "Remaining Time In Current Shift",
+        HubShiftUtil.getOfficialShiftInfo().remainingTime());
+    }
+    SmartDashboard.putBoolean(
+        "Our Hub is Active?", HubShiftUtil.getOfficialShiftInfo().active());
+    SmartDashboard.putString(
+        "Current Shift", HubShiftUtil.getOfficialShiftInfo().currentShift().name());
+    SmartDashboard.putString(
+        "Auto Winner",HubShiftUtil.getFirstActiveAlliance() == Alliance.Blue ? "Red" : "Blue");
   }
 }

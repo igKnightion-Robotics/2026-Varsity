@@ -136,12 +136,6 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "targetTrack"
-                }
-              },
-              {
                 "type": "wait",
                 "data": {
                   "waitTime": 1.0

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import java.util.function.DoubleSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -17,6 +18,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -73,12 +75,10 @@ public class DriveSubsystem extends SubsystemBase {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
 
-    m_gyro.enableOptionalMessages(true, true, false, false, false, false, false, false, false, false);
+    m_gyro.enableOptionalMessages(true, false, false, false, false, false, true, false, false, false);
 
     LimelightHelpers.SetIMUAssistAlpha("limelight-shooter", 0.001);
     LimelightHelpers.SetIMUMode("limelight-shooter", 1);
-
-    zeroHeading();
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
@@ -332,13 +332,11 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.resetYaw();
+    m_poseEstimator.resetRotation(Rotation2d.kZero);
   }
 
   public Rotation2d getAngle() {
-    Rotation2d angle = m_gyro.getRotation2d();
-    if (Constants.isBlueAlliance.get() && RobotState.isTeleop()){
-        // angle = angle.plus(Rotation2d.k180deg);
-    }
+    Rotation2d angle = Rotation2d.fromDegrees(m_gyro.getYaw().in(Degrees));
     return angle;
   }
 
