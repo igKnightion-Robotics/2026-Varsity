@@ -80,9 +80,10 @@ public final class Constants {
     public static final int kShooterLeftCanId = 22;
     public static final double kShooterLeftSpeed = 3800;
     public static final int kAgitatorCanId = 21;
-    public static final int kThumperCanId = 23;
     public static final double kAgitatorSpeed = -0.6;
-    public static final double kThumperSpeed = 0.2;
+    public static final int kRightRollerCanId = 26;
+    public static final int kLeftRollerCanId = 25;
+    public static final double kLeftRollerSpeed = 0.4;
 
     public static final double kReverseShooterSpeed = -500;
     public static final double kReverseAgitatorSpeed = 0.4;
@@ -96,10 +97,21 @@ public final class Constants {
     public static final double kFlipperSpeed = 0.35;
   }
 
-  // Flipper set points will need to be adjusted, these are just placeholders
   public static final class IntakeSetpoints {
     public static final double kStow = 0.535;
     public static final double kFeeding = 0.811;
+  }
+  public static final class ClimberConstants {
+    public static final int kClimberLeftCanId = 23;
+    public static final int kClimberRightCanId = 24; //will be changed, just put in as placeholders
+    public static final double kClimberSpeed = 0.6;
+    public static final double kReverseClimberSpeed = -0.5;
+    public static final double kClimberSmartCurrentLimit = 40;
+  }
+  public static final class ClimberSetpoints {
+    public static final double kPull = 0.2;
+    public static final double kRaise = 0.5; //these are just placeholders, will need to be tuned
+    public static final double kAway = 0.0;
   }
 
   public static final class FieldConstants {
@@ -135,7 +147,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.08;
 
-    public static final double ktwistDeadband = 0.15;
+    public static final double kTwistDeadband = 0.15;
   }
 
   public static final class AutoConstants {

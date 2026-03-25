@@ -20,87 +20,95 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final SparkFlex m_shooterLeftMotor;
   private final SparkFlex m_shooterRightMotor;
-  private final SparkFlex m_agitatorMotor;
-  // private final SparkFlex m_thumperMotor;
+  private final SparkFlex m_AgitatorMotor;
+  private final SparkFlex m_leftRollerMotor;
+  private final SparkFlex m_rightRollerMotor;
 
   private final SparkClosedLoopController m_shooterPID;
 
   public ShooterSubsystem() {
-    m_shooterLeftMotor = new SparkFlex(ShooterConstants.kShooterLeftCanId, SparkFlex.MotorType.kBrushless);
-  SparkFlexConfig shooterLeftConfig = new SparkFlexConfig();
-  shooterLeftConfig.idleMode(IdleMode.kCoast);
-  shooterLeftConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-  shooterLeftConfig.closedLoop.pid(0.00001, 0, 0);
-  shooterLeftConfig.closedLoop.feedForward.sv(0.35, 0.00175);
 
-  m_shooterLeftMotor.configure(
+    m_shooterLeftMotor = new SparkFlex(ShooterConstants.kShooterLeftCanId, SparkFlex.MotorType.kBrushless);
+    SparkFlexConfig shooterLeftConfig = new SparkFlexConfig();
+    shooterLeftConfig.idleMode(IdleMode.kCoast);
+    shooterLeftConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    shooterLeftConfig.closedLoop.pid(0.00001, 0, 0);
+    shooterLeftConfig.closedLoop.feedForward.sv(0.35, 0.00175);
+
+    m_shooterLeftMotor.configure(
       shooterLeftConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
       );
 
-  m_shooterPID = m_shooterLeftMotor.getClosedLoopController();
-
-
+    m_shooterPID = m_shooterLeftMotor.getClosedLoopController();
 
     m_shooterRightMotor = new SparkFlex(ShooterConstants.kShooterRightCanId, SparkFlex.MotorType.kBrushless);
-  SparkFlexConfig shooterRightConfig = new SparkFlexConfig();
-  shooterRightConfig.idleMode(IdleMode.kCoast);
-  shooterRightConfig.follow(m_shooterLeftMotor, true);
-  m_shooterRightMotor.configure(
+    SparkFlexConfig shooterRightConfig = new SparkFlexConfig();
+    shooterRightConfig.idleMode(IdleMode.kCoast);
+    shooterRightConfig.follow(m_shooterLeftMotor, true);
+
+    m_shooterRightMotor.configure(
       shooterRightConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
       );
 
 
-      m_agitatorMotor = new SparkFlex(ShooterConstants.kAgitatorCanId, SparkFlex.MotorType.kBrushless);
 
+    m_AgitatorMotor = new SparkFlex(ShooterConstants.kAgitatorCanId, SparkFlex.MotorType.kBrushless);
     SparkFlexConfig agitatorConfig = new SparkFlexConfig();
-  agitatorConfig.idleMode(IdleMode.kCoast);
+    agitatorConfig.idleMode(IdleMode.kCoast);
 
-  m_agitatorMotor.configure(
+    m_AgitatorMotor.configure(
       agitatorConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
-
       );
 
-//       m_thumperMotor = new SparkFlex(ShooterConstants.kThumperCanId, SparkFlex.MotorType.kBrushless);
+    m_leftRollerMotor = new SparkFlex(ShooterConstants.kLeftRollerCanId, SparkFlex.MotorType.kBrushless);
+    SparkFlexConfig leftRollerConfig = new SparkFlexConfig();
+    leftRollerConfig.idleMode(IdleMode.kCoast);
 
-//     SparkFlexConfig thumperConfig = new SparkFlexConfig();
-//   thumperConfig.idleMode(IdleMode.kCoast);
-//   thumperConfig.follow(m_agitatorMotor, false);
-// //We were thinking of adding setpoints to this to further agitate our hopper, but for now it just runs in a circle.
+    m_leftRollerMotor.configure(
+      leftRollerConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters
+      );
 
-//   m_thumperMotor.configure(
-//       thumperConfig,
-//       ResetMode.kResetSafeParameters,
-//       PersistMode.kPersistParameters
-//       );
+    m_rightRollerMotor = new SparkFlex(ShooterConstants.kRightRollerCanId, SparkFlex.MotorType.kBrushless);
+    SparkFlexConfig rightRollerConfig = new SparkFlexConfig();
+    rightRollerConfig.idleMode(IdleMode.kCoast);
+    rightRollerConfig.follow(m_leftRollerMotor, true);
+
+    m_rightRollerMotor.configure(
+        rightRollerConfig,
+        ResetMode.kNoResetSafeParameters,
+        PersistMode.kPersistParameters
+      );
   }
 
   public void setShooterSpeed(double setpoint) {
     m_shooterPID.setSetpoint(setpoint, ControlType.kVelocity);
   }
   public void setAgitatorSpeed(double speed) {
-    m_agitatorMotor.set(speed);
+    m_AgitatorMotor.set(speed);
   }
-  // public void setThumperSpeed(double speed) {
-  //   m_thumperMotor.set(speed);
+
+  public void setLeftRollerSpeed(double speed) {
+    m_leftRollerMotor.set(speed);
+  }
+
+  // public Command runShooter() {
+  //   return this.startEnd(
+  //     () -> this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed),
+  //     m_shooterLeftMotor::stopMotor);
   // }
-
-
-  public Command runShooter() {
-    return this.startEnd(
-      () -> this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed),
-      m_shooterLeftMotor::stopMotor);
-  }
-  public Command runAgitator() {
-    return this.startEnd(
-      () -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed),
-      m_agitatorMotor::stopMotor);
-  }
+  // public Command runAgitator() {
+  //   return this.startEnd(
+  //     () -> this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed),
+  //     m_topAgitatorMotor::stopMotor);
+  // }
 
 
   public Command runShooterAndAgitate() {
@@ -115,8 +123,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public Command stopShooterAndAgitator() {
     return this.run(() -> {
-        this.m_shooterLeftMotor.stopMotor();
-        this.m_agitatorMotor.stopMotor();});
+      this.m_shooterLeftMotor.stopMotor();
+      this.m_AgitatorMotor.stopMotor();});
   }
 
 
@@ -129,21 +137,20 @@ public class ShooterSubsystem extends SubsystemBase {
       },
       () -> {
         this.m_shooterLeftMotor.stopMotor();
-        this.m_agitatorMotor.stopMotor();
+        this.m_AgitatorMotor.stopMotor();
       }
     );
   }
 
 
-
-  public Command reverseShooter() {
-    return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed),
-    () -> this.setShooterSpeed(0));
-  }
-  public Command reverseAgitator() {
-    return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed),
-    () -> this.setAgitatorSpeed(0));
-  }
+  // public Command reverseShooter() {
+  //   return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed),
+  //   () -> this.setShooterSpeed(0));
+  // }
+  // public Command reverseAgitator() {
+  //   return this.startEnd(() -> this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed),
+  //   () -> this.setAgitatorSpeed(0));
+  // }
 
 
     @Override
@@ -151,6 +158,12 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("shooterSpeed", m_shooterLeftMotor.getEncoder().getVelocity());
 
+    // if (m_bottomAgitatorMotor.getOutputCurrent()>= ShooterConstants.kBottomAgitatorSmartCurrentLimit){
+    //   m_bottomAgitatorMotor.set(kReverseAgitatorSpeed / 2);
+    // }
+    // else if (m_bottomAgitatorMotor.getOutputCurrent() < ShooterConstants.kBottomAgitatorSmartCurrentLimit){
+    //   m_bottomAgitatorMotor.set(kTopAgitatorSpeed);
+    // }
   }
 
 }

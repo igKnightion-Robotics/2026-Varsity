@@ -3,6 +3,9 @@
 // defined by the Elastic license:
 // https://github.com/Gold872/elastic_dashboard/blob/main/LICENSE
 
+//Code stolen from Holmen, idk what any of this means
+
+
 package frc.robot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

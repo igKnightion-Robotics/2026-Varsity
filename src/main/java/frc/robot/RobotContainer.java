@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,9 +27,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import frc.robot.subsystems.ShooterSubsystem;
-import edu.wpi.first.wpilibj.Timer;
-
-
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -50,6 +48,7 @@ public class RobotContainer {
 
   public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
   public static final IntakeSubsystem m_intake = new IntakeSubsystem();
+  public static final ClimberSubsystem m_climber = new ClimberSubsystem();
 
       // Drive suppliers
     DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
@@ -93,7 +92,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(rightController.getZ(), OIConstants.ktwistDeadband),
+                -MathUtil.applyDeadband(rightController.getZ(), OIConstants.kTwistDeadband),
                 true),
             m_robotDrive));
 
@@ -152,6 +151,7 @@ public class RobotContainer {
         .whileTrue(m_robotDrive.setXCommand());
       new JoystickButton(leftController, 6)
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
+
 
   }
   /**

@@ -276,15 +276,15 @@ public class DriveSubsystem extends SubsystemBase {
   public Command aprilTagAim(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed) {
     return this.run(() -> {
       LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shooter");
-      
+
       if(megaTag1 != null && megaTag1.tagCount > 0){
         double rotError = LimelightHelpers.getTX("limelight-shooter");
         double rotSpeed = m_limeLightAimPidController.calculate(rotError, 0);
 
         // Simple proportional control for demonstration purposes
         if (m_limeLightAimPidController.atSetpoint()){
-          drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true); 
-        } else { 
+          drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), 0, true);
+        } else {
           drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotSpeed, true);
         }
       } else {
