@@ -87,6 +87,7 @@ public final class Constants {
 
     public static final double kReverseShooterSpeed = -500;
     public static final double kReverseAgitatorSpeed = 0.4;
+    public static final double kReverseLeftRollerSpeed = -0.3;
   }
 
   public static final class IntakeConstants {
@@ -102,11 +103,11 @@ public final class Constants {
     public static final double kFeeding = 0.811;
   }
   public static final class ClimberConstants {
-    public static final int kClimberLeftCanId = 23;
-    public static final int kClimberRightCanId = 24; //will be changed, just put in as placeholders
+    public static final int kClimberCanId = 23;
+    // public static final int kClimberRightCanId = 24; //will be changed, just put in as placeholders
     public static final double kClimberSpeed = 0.6;
     public static final double kReverseClimberSpeed = -0.5;
-    public static final double kClimberSmartCurrentLimit = 40;
+    public static final double kClimberSmartCurrentLimit = 800;
   }
   public static final class ClimberSetpoints {
     public static final double kPull = 0.2;

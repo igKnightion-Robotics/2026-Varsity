@@ -117,6 +117,7 @@ public class ShooterSubsystem extends SubsystemBase {
       this.run(() -> {
         this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed);
         this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
+        this.setLeftRollerSpeed(ShooterConstants.kLeftRollerSpeed);
       })
     );
   }
@@ -124,7 +125,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public Command stopShooterAndAgitator() {
     return this.run(() -> {
       this.m_shooterLeftMotor.stopMotor();
-      this.m_AgitatorMotor.stopMotor();});
+      this.m_AgitatorMotor.stopMotor();
+      this.m_leftRollerMotor.stopMotor();});
   }
 
 
@@ -133,11 +135,12 @@ public class ShooterSubsystem extends SubsystemBase {
       () -> {
         this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed);
         this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed);
-
+        this.setLeftRollerSpeed(ShooterConstants.kReverseLeftRollerSpeed);
       },
       () -> {
         this.m_shooterLeftMotor.stopMotor();
         this.m_AgitatorMotor.stopMotor();
+        this.m_leftRollerMotor.stopMotor();
       }
     );
   }

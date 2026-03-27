@@ -66,13 +66,16 @@ public class RobotContainer {
       NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
       NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
-      //NamedCommands.registerCommand("dropAndRunIntake", m_intake.runIntakeAndDropFlipper());
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
       NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }).withTimeout(2.0));
       NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
-      //NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+
+      NamedCommands.registerCommand("climberRaise", m_climber.climberRaise());
+      NamedCommands.registerCommand("climberPull", m_climber.climberMuscleUp());
+      NamedCommands.registerCommand("climberStow", m_climber.climberStow());
+      //have to be added to pathplanner still
 
       // Do all other initialization
       // configureButtonBindings();
@@ -149,9 +152,18 @@ public class RobotContainer {
 
       new JoystickButton(leftController, 3)
         .whileTrue(m_robotDrive.setXCommand());
+
       new JoystickButton(leftController, 6)
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
+      new JoystickButton(rightController,5)
+        .onTrue(Commands.runOnce(m_climber::climberUp));
+
+      new JoystickButton(rightController,6)
+        .onTrue(Commands.runOnce(m_climber::climberPull));
+
+      new JoystickButton(leftController,7)
+        .onTrue(Commands.runOnce(m_climber::climberStow));
 
   }
   /**

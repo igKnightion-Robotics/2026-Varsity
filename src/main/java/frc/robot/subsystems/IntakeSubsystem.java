@@ -25,8 +25,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private final SparkFlex m_intakeMotor;
   private final SparkFlex m_flipperMotor;
 
-  private SparkClosedLoopController m_pidController;
-  private SparkAbsoluteEncoder m_absEncoder;
+  private SparkClosedLoopController m_flipperPidController;
+  private SparkAbsoluteEncoder m_flipperAbsEncoder;
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
@@ -60,10 +60,10 @@ public class IntakeSubsystem extends SubsystemBase {
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters);
 
-    m_pidController = m_flipperMotor.getClosedLoopController();
-    m_absEncoder = m_flipperMotor.getAbsoluteEncoder();
+    m_flipperPidController = m_flipperMotor.getClosedLoopController();
+    m_flipperAbsEncoder = m_flipperMotor.getAbsoluteEncoder();
 
-    SmartDashboard.putNumber("Flipper Angle", m_absEncoder.getPosition());
+    SmartDashboard.putNumber("Flipper Angle", m_flipperAbsEncoder.getPosition());
     SmartDashboard.putBoolean("Flipper At Setpoint", isFlipperDown());
 
     setPosition(IntakeSetpoints.kStow);
@@ -93,7 +93,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public Command reverseIntake() {
-    return this.startEnd(() -> this.setIntakeSpeed(IntakeConstants.kReverseIntakeSpeed),
+    return this.startEnd(
+    () -> this.setIntakeSpeed(IntakeConstants.kReverseIntakeSpeed),
     () -> this.setIntakeSpeed(0));
   }
 
@@ -105,7 +106,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    m_pidController.setSetpoint(position, ControlType.kPosition);
+    m_flipperPidController.setSetpoint(position, ControlType.kPosition);
   }
 
   public void feedFlipper() {
@@ -113,7 +114,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean isFlipperDown(){
-    return m_pidController.isAtSetpoint();
+    return m_flipperPidController.isAtSetpoint();
   }
 
   public Command stowFlipper() {
@@ -123,8 +124,8 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Flipper Angle", m_absEncoder.getPosition());
-    SmartDashboard.putNumber("Flipper Commanded Angle", m_pidController.getSetpoint());
+    SmartDashboard.putNumber("Flipper Angle", m_flipperAbsEncoder.getPosition());
+    SmartDashboard.putNumber("Flipper Commanded Angle", m_flipperPidController.getSetpoint());
     SmartDashboard.putBoolean("Flipper At Setpoint", isFlipperDown());
   }
 }
