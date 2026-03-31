@@ -35,7 +35,7 @@ public class ClimberSubsystem extends SubsystemBase {
     SparkFlexConfig climberConfig = new SparkFlexConfig();
     climberConfig.idleMode(IdleMode.kBrake);
     climberConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-    climberConfig.closedLoop.pid(3.0, 0.0, 0.0);
+    climberConfig.closedLoop.pid(0.0, 0.0, 0.0);
     //will need to be adjusted based on testing, these are just placeholders
 
     // Optional: limit output for safety
@@ -88,7 +88,7 @@ setPosition(ClimberSetpoints.kAway);
       () -> { this.m_climberMotor.stopMotor(); }
     ).until(this::isClimberAtSetpoint);
   }
-  public Command climberMuscleUp(){
+  public Command climberPullUp(){
     return this.startEnd(
       this::climberPull,
       () -> { this.m_climberMotor.stopMotor(); }

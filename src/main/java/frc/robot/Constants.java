@@ -16,10 +16,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
-
-
-
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -105,9 +101,9 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int kClimberCanId = 23;
     // public static final int kClimberRightCanId = 24; //will be changed, just put in as placeholders
-    public static final double kClimberSpeed = 0.6;
-    public static final double kReverseClimberSpeed = -0.5;
-    public static final double kClimberSmartCurrentLimit = 800;
+    public static final double kClimberSpeed = 0.4;
+    public static final double kReverseClimberSpeed = -0.2;
+    public static final double kClimberSmartCurrentLimit = 80;
   }
   public static final class ClimberSetpoints {
     public static final double kPull = 0.2;

@@ -50,7 +50,7 @@ public class RobotContainer {
   public static final IntakeSubsystem m_intake = new IntakeSubsystem();
   public static final ClimberSubsystem m_climber = new ClimberSubsystem();
 
-      // Drive suppliers
+    // Drive suppliers
     DoubleSupplier driverX = () -> -leftController.getRawAxis(1); // Y-axis joystick
     DoubleSupplier driverY = () -> -leftController.getRawAxis(0); // X-axis joystick
     DoubleSupplier angleX = () -> rightController.getRawAxis(0); // X-axis joystick
@@ -62,7 +62,7 @@ public class RobotContainer {
 
     public RobotContainer() {
      // Register Named Commands
-  // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
+    // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
       NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
       NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
@@ -73,7 +73,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
 
       NamedCommands.registerCommand("climberRaise", m_climber.climberRaise());
-      NamedCommands.registerCommand("climberPull", m_climber.climberMuscleUp());
+      NamedCommands.registerCommand("climberPull", m_climber.climberPullUp());
       NamedCommands.registerCommand("climberStow", m_climber.climberStow());
       //have to be added to pathplanner still
 
@@ -101,6 +101,7 @@ public class RobotContainer {
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
+      m_climber.setDefaultCommand(m_climber.climberStow());
 
     }
 
@@ -120,7 +121,7 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-       // Default command, normal field-relative drive
+      // Default command, normal field-relative drive
       // Joystick drive command (driver and operator)
 
       //Shooter Buttons and Intake Buttons
