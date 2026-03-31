@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.FlywheelLookup;
 
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -145,6 +147,15 @@ public class ShooterSubsystem extends SubsystemBase {
     );
   }
 
+  public Command rangedShooting(DriveSubsystem drive) {
+    return this.run(() -> {
+      double distanceToTarget = drive.distanceToTarget(Constants.isBlueAlliance.get() ? Constants.FieldConstants.kBlueHubLocation : Constants.FieldConstants.kRedHubLocation);
+      double desiredShooterSpeed = FlywheelLookup.getRpmForDistance(distanceToTarget);
+      this.setShooterSpeed(desiredShooterSpeed);
+      this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
+      this.setLeftRollerSpeed(ShooterConstants.kLeftRollerSpeed);
+    });
+  }
 
   // public Command reverseShooter() {
   //   return this.startEnd(() -> this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed),

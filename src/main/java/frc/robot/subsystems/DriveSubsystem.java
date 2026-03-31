@@ -132,6 +132,8 @@ public class DriveSubsystem extends SubsystemBase {
       },
       this // Reference to this subsystem to set requirements
     );
+
+    resetPose(new Pose2d(13.549, 4.080, Rotation2d.k180deg));
   }
 
   @Override
@@ -156,6 +158,23 @@ public class DriveSubsystem extends SubsystemBase {
 
     LimelightHelpers.SetIMUMode("limelight-shooter", 4);
 
+    boolean doRejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation("limelight-shooter", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
+    if (Math.abs(m_gyro.getAngularVel()[2].in(DegreesPerSecond)) > 720) {
+      doRejectUpdate = true;
+    }
+
+    if (megaTag2 == null) {
+      doRejectUpdate = true;
+    } else if(megaTag2.tagCount == 0 ){
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate ){
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
+      m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
+    }
+
     // Update the odometry in the periodic block
     m_poseEstimator.update(
       getAngle(),
@@ -165,25 +184,6 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
       });
-
-    if (!Constants.isBlueAlliance.get()) {
-      boolean doRejectUpdate = false;
-      LimelightHelpers.SetRobotOrientation("limelight-shooter", getAngle().getDegrees(), 0, 0, 0, 0, 0);
-      LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
-      if (Math.abs(m_gyro.getAngularVel()[2].in(DegreesPerSecond)) > 720) {
-        doRejectUpdate = true;
-      }
-
-      if (megaTag2 == null) {
-        doRejectUpdate = true;
-      } else if(megaTag2.tagCount == 0 ){
-        doRejectUpdate = true;
-      }
-      if(!doRejectUpdate ){
-        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
-        m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
-      }
-    }
 
     // adding a field map to the smart dashboard
     field2d.setRobotPose(m_poseEstimator.getEstimatedPosition());
@@ -209,6 +209,9 @@ public class DriveSubsystem extends SubsystemBase {
       return targetAngle.minus(robotPose.getRotation());
   }
 
+  public double distanceToTarget(Pose2d targetPose) {
+    return targetPose.getTranslation().getDistance(getPose().getTranslation());
+  }
   /**
    * Resets the odometry to the specified pose.
    *
