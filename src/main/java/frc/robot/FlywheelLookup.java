@@ -11,12 +11,14 @@ public class FlywheelLookup {
     private static final InterpolatingDoubleTreeMap kDistanceToRpm = new InterpolatingDoubleTreeMap();
     static {
         // Add distance to RPM mappings here
-        kDistanceToRpm.put(2.097, 3500.0);
-        kDistanceToRpm.put(2.677, 3500.0);
-        kDistanceToRpm.put(3.127, 3700.0);
-        kDistanceToRpm.put(3.627, 3850.0);
-        kDistanceToRpm.put(4.127, 2500.0);
-        kDistanceToRpm.put(5.0, 3000.0);
+        kDistanceToRpm.put(1.7, 0.0);
+        kDistanceToRpm.put(1.967, 3575.0);
+        kDistanceToRpm.put(2.367, 3575.0);
+        kDistanceToRpm.put(2.887, 3700.0);
+        kDistanceToRpm.put(3.337, 3850.0);
+        kDistanceToRpm.put(3.747, 4150.0);
+        kDistanceToRpm.put(4.187, 4400.0);
+        kDistanceToRpm.put(5.427, 5000.0);
     }
 
     public static double getRpmForDistance(double distanceMeters) {

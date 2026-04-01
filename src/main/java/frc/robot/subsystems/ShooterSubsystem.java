@@ -85,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_rightRollerMotor.configure(
         rightRollerConfig,
-        ResetMode.kNoResetSafeParameters,
+        ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters
       );
   }
@@ -148,13 +148,20 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command rangedShooting(DriveSubsystem drive) {
-    return this.run(() -> {
-      double distanceToTarget = drive.distanceToTarget(Constants.isBlueAlliance.get() ? Constants.FieldConstants.kBlueHubLocation : Constants.FieldConstants.kRedHubLocation);
-      double desiredShooterSpeed = FlywheelLookup.getRpmForDistance(distanceToTarget);
-      this.setShooterSpeed(desiredShooterSpeed);
-      this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
-      this.setLeftRollerSpeed(ShooterConstants.kLeftRollerSpeed);
-    });
+    return Commands.sequence(
+      this.run(() -> { 
+        double distanceToTarget = drive.distanceToTarget(Constants.isBlueAlliance.get() ? Constants.FieldConstants.kBlueHubLocation : Constants.FieldConstants.kRedHubLocation);
+        SmartDashboard.putNumber("Distance to Hub", distanceToTarget);
+        double desiredShooterSpeed = FlywheelLookup.getRpmForDistance(distanceToTarget);
+        this.setShooterSpeed(desiredShooterSpeed);}).withTimeout(0.5),
+      this.run(() -> {
+        double distanceToTarget = drive.distanceToTarget(Constants.isBlueAlliance.get() ? Constants.FieldConstants.kBlueHubLocation : Constants.FieldConstants.kRedHubLocation);
+        if  (distanceToTarget >= 1.967) {
+          this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
+          this.setLeftRollerSpeed(ShooterConstants.kLeftRollerSpeed);
+        }
+      })
+    );
   }
 
   // public Command reverseShooter() {

@@ -138,14 +138,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (Constants.isBlueAlliance.get()) {
-      int[] validTagIds = {26};
-      LimelightHelpers.SetFiducialIDFiltersOverride("limelight-shooter", validTagIds);
-    } else {
-      int[] validTagIds = {};
-      LimelightHelpers.SetFiducialIDFiltersOverride("limelight-shooter", validTagIds);
-    }
-
     SmartDashboard.putNumber("gyroAngle", getAngle().getDegrees());
     double aimingKP = SmartDashboard.getNumber("Aiming KP", 0);
     double aimingKI = SmartDashboard.getNumber("Aiming KI", 0);
@@ -157,24 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_limeLightAimPidController.setTolerance(aimingTolerance);
 
     LimelightHelpers.SetIMUMode("limelight-shooter", 4);
-
-    boolean doRejectUpdate = false;
-    LimelightHelpers.SetRobotOrientation("limelight-shooter", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
-    if (Math.abs(m_gyro.getAngularVel()[2].in(DegreesPerSecond)) > 720) {
-      doRejectUpdate = true;
-    }
-
-    if (megaTag2 == null) {
-      doRejectUpdate = true;
-    } else if(megaTag2.tagCount == 0 ){
-      doRejectUpdate = true;
-    }
-    if(!doRejectUpdate ){
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
-      m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
-    }
-
+    
     // Update the odometry in the periodic block
     m_poseEstimator.update(
       getAngle(),
@@ -184,6 +159,26 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
       });
+
+    boolean doRejectUpdate = false;
+    Rotation2d currentAngle = Constants.isBlueAlliance.get() ? getAngle() : getAngle().plus(Rotation2d.k180deg);
+    double yawRate = m_gyro.getAngularVel()[2].in(DegreesPerSecond);
+    LimelightHelpers.SetRobotOrientation("limelight-shooter", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
+    if (Math.abs(yawRate) > 360) {
+      doRejectUpdate = true;
+    }
+
+    if (megaTag2 == null) {
+      doRejectUpdate = true;
+    }
+    if(megaTag2.tagCount == 0 ){
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate ){
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
+      m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
+    }
 
     // adding a field map to the smart dashboard
     field2d.setRobotPose(m_poseEstimator.getEstimatedPosition());
