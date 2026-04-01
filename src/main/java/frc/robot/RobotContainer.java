@@ -63,7 +63,7 @@ public class RobotContainer {
     public RobotContainer() {
      // Register Named Commands
     // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
-      NamedCommands.registerCommand("runShooter", m_shooter.runShooterAndAgitate());
+      NamedCommands.registerCommand("runShooter", m_shooter.rangedShooting(m_robotDrive));
       NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
@@ -100,7 +100,7 @@ public class RobotContainer {
             m_robotDrive));
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
-      m_shooter.setDefaultCommand(m_shooter.rangedShooting(m_robotDrive));
+      m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
       m_climber.setDefaultCommand(m_climber.climberStow());
 
     }
@@ -126,7 +126,7 @@ public class RobotContainer {
 
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
-        .whileTrue(m_shooter.runShooterAndAgitate());
+        .whileTrue(m_shooter.rangedShooting(m_robotDrive));
 
       new JoystickButton(leftController, 1)
         .whileTrue(m_intake.runIntakeAndDropFlipper());

@@ -23,5 +23,4 @@ public class FlywheelLookup {
         return kDistanceToRpm.get(distanceMeters);
     }
 
-    
 }

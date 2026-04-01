@@ -77,8 +77,8 @@ public final class Constants {
     public static final double kShooterLeftSpeed = 3800;
     public static final int kAgitatorCanId = 21;
     public static final double kAgitatorSpeed = -0.6;
-    public static final int kRightRollerCanId = 26;
-    public static final int kLeftRollerCanId = 25;
+    public static final int kRightRollerCanId = 30;
+    public static final int kLeftRollerCanId = 31;
     public static final double kLeftRollerSpeed = 0.4;
 
     public static final double kReverseShooterSpeed = -500;
