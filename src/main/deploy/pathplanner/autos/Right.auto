@@ -150,12 +150,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "climberRaise"
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [

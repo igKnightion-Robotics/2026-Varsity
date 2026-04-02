@@ -62,7 +62,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 6.0
+                              "waitTime": 5.0
                             }
                           }
                         ]
@@ -123,7 +123,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 6.0
+                        "waitTime": 3.0
                       }
                     },
                     {
@@ -139,7 +139,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -151,7 +151,32 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "targetTrack"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "runShooter"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -161,45 +186,32 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "runShooter"
+                        "name": "stowFlipper"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 6.0
+                        "waitTime": 2.0
                       }
                     }
                   ]
                 }
               },
               {
-                "type": "sequential",
+                "type": "race",
                 "data": {
                   "commands": [
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 3.0
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "stowFlipper"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.0
-                            }
-                          }
-                        ]
+                        "name": "runShooter"
                       }
                     }
                   ]
@@ -225,12 +237,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climberRaise"
           }
         },
         {
