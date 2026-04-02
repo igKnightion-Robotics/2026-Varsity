@@ -106,8 +106,8 @@ public final class Constants {
     public static final double kClimberSmartCurrentLimit = 80;
   }
   public static final class ClimberSetpoints {
-    public static final double kPull = 0.2;
-    public static final double kRaise = 0.5; //these are just placeholders, will need to be tuned
+    public static final double kLockout = 0.860;
+    // public static final double kRaise = ; //these are just placeholders, will need to be tuned
     public static final double kAway = 0.0;
   }
 
@@ -121,7 +121,7 @@ public final class Constants {
   // public static final double DEADBAND = 0.75;
   // public static final double LEFT_Y_DEADBAND = 0.1;
   // public static final double RIGHT_X_DEADBAND = 0.1;
-  public static final double TURN_CONSTANT = 6;
+  // public static final double TURN_CONSTANT = 6;
 
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
@@ -144,7 +144,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.08;
 
-    public static final double kTwistDeadband = 0.15;
+    public static final double kTwistDeadband = 0.25;
   }
 
   public static final class AutoConstants {

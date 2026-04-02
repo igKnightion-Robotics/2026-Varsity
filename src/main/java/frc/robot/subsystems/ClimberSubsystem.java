@@ -26,7 +26,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private final SparkFlex m_climberMotor;
   // private final SparkFlex m_leftClimberMotor;
   // private final SparkFlex m_rightClimberMotor;
-    private SparkClosedLoopController m_climberPidController;
+  private SparkClosedLoopController m_climberPidController;
   private SparkAbsoluteEncoder m_climberAbsEncoder;
 
   public ClimberSubsystem() {
@@ -68,11 +68,11 @@ setPosition(ClimberSetpoints.kAway);
     m_climberPidController.setSetpoint(position, ControlType.kPosition);
   }
 
-  public void climberUp() {
-    setPosition(ClimberSetpoints.kRaise);
-  }
+  // public void climberUp() {
+  //   setPosition(ClimberSetpoints.kRaise);
+  // }
   public void climberPull() {
-    setPosition(ClimberSetpoints.kPull);
+    setPosition(ClimberSetpoints.kLockout);
   }
   public void climberAway() {
     setPosition(ClimberSetpoints.kAway);
@@ -82,12 +82,12 @@ setPosition(ClimberSetpoints.kAway);
     return m_climberPidController.isAtSetpoint();
   }
 
-  public Command climberRaise(){
-    return this.startEnd(
-      this::climberUp,
-      () -> { this.m_climberMotor.stopMotor(); }
-    ).until(this::isClimberAtSetpoint);
-  }
+  // public Command climberRaise(){
+  //   return this.startEnd(
+  //     this::climberUp,
+  //     () -> { this.m_climberMotor.stopMotor(); }
+  //   ).until(this::isClimberAtSetpoint);
+  // }
   public Command climberPullUp(){
     return this.startEnd(
       this::climberPull,
