@@ -38,7 +38,12 @@ public class ClimberSubsystem extends SubsystemBase {
     climberConfig.closedLoop.pid(0.1, 0.0, 0.0);
     climberConfig.closedLoop.outputRange(-1, 1);
 
-    //will need to be adjusted based on testing, these are just placeholders
+    climberConfig.softLimit.forwardSoftLimit(0.8);
+    climberConfig.softLimit.forwardSoftLimitEnabled(true);
+
+    climberConfig.softLimit.reverseSoftLimit(0.0);
+    climberConfig.softLimit.reverseSoftLimitEnabled(true);
+    //added via ChatGPT so not sure about this
 
     // Optional: limit output for safety
 
@@ -78,7 +83,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // }
 
 public void setPosition(double setpoint) {
-    m_climberPidController.setReference(setpoint, ControlType.kPosition);
+    m_climberPidController.setSetpoint(setpoint, ControlType.kPosition);
 }
 
 
