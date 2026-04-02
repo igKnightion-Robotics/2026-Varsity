@@ -11,6 +11,8 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
@@ -27,6 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private SparkClosedLoopController m_flipperPidController;
   private SparkAbsoluteEncoder m_flipperAbsEncoder;
+  // Example: assuming a simple PIDController
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {

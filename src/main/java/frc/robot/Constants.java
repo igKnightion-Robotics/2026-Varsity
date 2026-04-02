@@ -101,8 +101,8 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int kClimberCanId = 23;
     // public static final int kClimberRightCanId = 24; //will be changed, just put in as placeholders
-    public static final double kClimberSpeed = 0.4;
-    public static final double kReverseClimberSpeed = -0.2;
+    public static final double kClimberSpeed = 0.05;
+    // public static final double kReverseClimberSpeed = -0.2;
     public static final double kClimberSmartCurrentLimit = 80;
   }
   public static final class ClimberSetpoints {

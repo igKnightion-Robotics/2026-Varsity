@@ -12,7 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkBase.ControlType;
 
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,11 +35,12 @@ public class ClimberSubsystem extends SubsystemBase {
     SparkFlexConfig climberConfig = new SparkFlexConfig();
     climberConfig.idleMode(IdleMode.kBrake);
     climberConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-    climberConfig.closedLoop.pid(0.0, 0.0, 0.0);
+    climberConfig.closedLoop.pid(0.1, 0.0, 0.0);
+    climberConfig.closedLoop.outputRange(-1, 1);
+
     //will need to be adjusted based on testing, these are just placeholders
 
     // Optional: limit output for safety
-    climberConfig.closedLoop.outputRange(-1, 1);
 
     m_climberMotor.configure(
       climberConfig,
@@ -57,16 +58,31 @@ public class ClimberSubsystem extends SubsystemBase {
     //   com.revrobotics.PersistMode.kPersistParameters
     // );
 
+
     m_climberPidController = m_climberMotor.getClosedLoopController();
     m_climberAbsEncoder = m_climberMotor.getAbsoluteEncoder();
 
-setPosition(ClimberSetpoints.kAway);
+
+// setPosition(ClimberSetpoints.kAway);
 
   }
+  // if (setpoint == ClimberSetpoints.kAway) {
+  //   // STOW → always go DOWN
+  //   m_climberMotor.set(-ClimberConstants.kClimberSpeed);
+  // } else if (setpoint == ClimberSetpoints.kLockout) {
+  //   // RAISE → always go UP
+  //   m_climberMotor.set(+ClimberConstants.kClimberSpeed);
+  // }
+    // public void setPosition(double position) {
+    //   m_climberPidController.setSetpoint(position, ControlType.kPosition);
+    // }
 
-  public void setPosition(double position) {
-    m_climberPidController.setSetpoint(position, ControlType.kPosition);
-  }
+public void setPosition(double setpoint) {
+    m_climberPidController.setReference(setpoint, ControlType.kPosition);
+}
+
+
+
 
   // public void climberUp() {
   //   setPosition(ClimberSetpoints.kRaise);
@@ -77,29 +93,35 @@ setPosition(ClimberSetpoints.kAway);
   public void climberAway() {
     setPosition(ClimberSetpoints.kAway);
   }
-
-  public boolean isClimberAtSetpoint() {
-    return m_climberPidController.isAtSetpoint();
+  public void climberStop(double speed) {
+    m_climberMotor.set(speed);
   }
 
-  // public Command climberRaise(){
-  //   return this.startEnd(
-  //     this::climberUp,
-  //     () -> { this.m_climberMotor.stopMotor(); }
-  //   ).until(this::isClimberAtSetpoint);
-  // }
-  public Command climberPullUp(){
+  public boolean isClimberAtLockout() {
+    return m_climberPidController.isAtSetpoint();
+}
+public boolean isClimberAtStow() {
+    return m_climberPidController.isAtSetpoint();
+}
+
+  public Command Lockout(){
     return this.startEnd(
       this::climberPull,
       () -> { this.m_climberMotor.stopMotor(); }
-    ).until(this::isClimberAtSetpoint);
+    ).until(this::isClimberAtLockout);
   }
   public Command climberStow(){
     return this.startEnd(
       this::climberAway,
       () -> { this.m_climberMotor.stopMotor(); }
-    ).until(this::isClimberAtSetpoint);
+    ).until(this::isClimberAtStow);
   }
+  public Command climberStop() {
+    return this.startEnd(
+        () -> m_climberMotor.stopMotor(),
+        () -> m_climberMotor.stopMotor()
+    );
+}
 
   @Override
   public void periodic() {

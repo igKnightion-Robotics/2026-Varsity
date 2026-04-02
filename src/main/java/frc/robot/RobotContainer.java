@@ -73,7 +73,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
 
       // NamedCommands.registerCommand("climberRaise", m_climber.climberRaise());
-      NamedCommands.registerCommand("climberPull", m_climber.climberPullUp());
+      NamedCommands.registerCommand("climberPull", m_climber.Lockout());
       NamedCommands.registerCommand("climberStow", m_climber.climberStow());
       //have to be added to pathplanner still
 
@@ -101,7 +101,7 @@ public class RobotContainer {
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
-      m_climber.setDefaultCommand(m_climber.climberStow());
+      // m_climber.setDefaultCommand(m_climber.climberStow());
 
     }
 
@@ -157,14 +157,14 @@ public class RobotContainer {
       new JoystickButton(leftController, 6)
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
-      // new JoystickButton(rightController,5)
-      //   .onTrue(Commands.runOnce(m_climber::climberUp));
+      new JoystickButton(rightController,6)
+        .onTrue(Commands.runOnce(m_climber::climberPull));
 
-      // new JoystickButton(rightController,6)
-      //   .onTrue(Commands.runOnce(m_climber::climberPull));
+      new JoystickButton(rightController,5)
+        .onTrue(Commands.runOnce(m_climber::climberStow));
 
-      // new JoystickButton(leftController,7)
-      //   .onTrue(Commands.runOnce(m_climber::climberStow));
+      new JoystickButton(rightController, 12)
+        .toggleOnTrue(Commands.runOnce(m_climber::climberStop));
 
   }
   /**
