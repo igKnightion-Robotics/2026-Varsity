@@ -34,14 +34,9 @@ public class ClimberSubsystem extends SubsystemBase {
     SparkFlexConfig climberConfig = new SparkFlexConfig();
     climberConfig.idleMode(IdleMode.kBrake);
     climberConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-    climberConfig.closedLoop.pid(0.1, 0.0, 0.0);
+    climberConfig.closedLoop.pid(6.0, 0.0, 0.0);
     climberConfig.closedLoop.outputRange(0, 1);
 
-    climberConfig.softLimit.forwardSoftLimit(0.8);
-    climberConfig.softLimit.forwardSoftLimitEnabled(true);
-
-    climberConfig.softLimit.reverseSoftLimit(0.0);
-    climberConfig.softLimit.reverseSoftLimitEnabled(true);
     //added via ChatGPT so not sure about this
 
     // Optional: limit output for safety
@@ -95,10 +90,11 @@ public void setPosition(double setpoint) {
     setPosition(ClimberSetpoints.kLockout);
   }
   public void climberAway() {
-    setPosition(ClimberSetpoints.kAway);
+    System.out.println("******************** CLIMBER AWAY ***********************");
+    // setPosition(ClimberSetpoints.kAway);
   }
-  public void climberStop(double speed) {
-    m_climberMotor.set(speed);
+  public void climberDoStop() {
+    m_climberMotor.stopMotor();
   }
 
   public boolean isClimberAtLockout() {
@@ -108,23 +104,16 @@ public boolean isClimberAtStow() {
     return m_climberPidController.isAtSetpoint();
 }
 
-  public Command Lockout(){
-    return this.startEnd(
-      this::climberPull,
-      () -> { this.m_climberMotor.stopMotor(); }
-    ).until(this::isClimberAtLockout);
+  public Command climberLockout(){
+    return this.run(this::climberPull);
   }
+
   public Command climberStow(){
-    return this.startEnd(
-      this::climberAway,
-      () -> { this.m_climberMotor.stopMotor(); }
-    ).until(this::isClimberAtStow);
+    return this.run(this::climberAway);
   }
+
   public Command climberStop() {
-    return this.startEnd(
-        () -> m_climberMotor.stopMotor(),
-        () -> m_climberMotor.stopMotor()
-    );
+    return this.run(this::climberDoStop);
 }
 
   @Override

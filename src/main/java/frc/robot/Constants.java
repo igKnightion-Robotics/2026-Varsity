@@ -106,9 +106,9 @@ public final class Constants {
     public static final double kClimberSmartCurrentLimit = 80;
   }
   public static final class ClimberSetpoints {
-    public static final double kLockout = 0.860;
+    public static final double kLockout = 0.85;
     // public static final double kRaise = ; //these are just placeholders, will need to be tuned
-    public static final double kAway = 0.0;
+    public static final double kAway = 0.03;
   }
 
   public static final class FieldConstants {

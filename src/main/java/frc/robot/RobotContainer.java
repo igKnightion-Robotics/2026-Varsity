@@ -73,7 +73,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
 
       // NamedCommands.registerCommand("climberRaise", m_climber.climberRaise());
-      NamedCommands.registerCommand("climberPull", m_climber.Lockout());
+      NamedCommands.registerCommand("climberPull", m_climber.climberLockout());
       NamedCommands.registerCommand("climberStow", m_climber.climberStow());
       //have to be added to pathplanner still
 
@@ -101,7 +101,7 @@ public class RobotContainer {
 
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
-      // m_climber.setDefaultCommand(m_climber.climberStow());
+      m_climber.setDefaultCommand(m_climber.climberStop());
 
     }
 
@@ -135,15 +135,9 @@ public class RobotContainer {
         .whileTrue(m_shooter.reverseShooterAndAgitate());
 
       new JoystickButton(rightController, 4)
-        .whileTrue(Commands.either(
-          m_robotDrive.aprilTagAim(
+        .whileTrue( m_robotDrive.targetTrack(
             () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
-            () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); },
-            () -> { return -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband); }),
-          m_robotDrive.targetTrack(
-            () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
-            () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband); }),
-          Constants.isBlueAlliance::get));
+            () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband);}));
 
       new JoystickButton(leftController, 4)
         .toggleOnTrue(m_intake.stowFlipper());
@@ -157,15 +151,14 @@ public class RobotContainer {
       new JoystickButton(leftController, 6)
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
-      // new JoystickButton(rightController,6)
-      //   .onTrue(Commands.runOnce(m_climber::climberPull));
+      new JoystickButton(rightController,6)
+        .onTrue(Commands.parallel(
+          m_intake.stowFlipper(),
+          Commands.sequence(Commands.waitSeconds(0.5),
+                            m_climber.climberLockout())));
 
-      // new JoystickButton(rightController,5)
-      //   .onTrue(Commands.runOnce(m_climber::climberStow));
-
-      // new JoystickButton(rightController, 12)
-      //   .toggleOnTrue(Commands.runOnce(m_climber::climberStop));
-
+      new JoystickButton(rightController,5)
+        .onTrue(m_climber.climberStow());
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
