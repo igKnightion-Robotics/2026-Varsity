@@ -137,7 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
     } else {
       resetPose(FieldConstants.kRedResetPose);
     }
-    
+
     // resetPose(new Pose2d(13.549, 4.080, Rotation2d.k180deg));
   }
 
@@ -180,7 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
     if(megaTag2.tagCount == 0 ){
       doRejectUpdate = true;
     }
-    if(!doRejectUpdate ){
+    if(!doRejectUpdate && Constants.isBlueAlliance.get()){
       m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
       m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
     }
@@ -309,7 +309,7 @@ public class DriveSubsystem extends SubsystemBase {
   public Command setXCommand() {
     return this.run(this::setX);
   }
-  
+
   public Command resetToKnownPose() {
     return this.runOnce(() -> {
       if (Constants.isBlueAlliance.get()){
