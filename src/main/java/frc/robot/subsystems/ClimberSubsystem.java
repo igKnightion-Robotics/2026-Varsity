@@ -90,8 +90,7 @@ public void setPosition(double setpoint) {
     setPosition(ClimberSetpoints.kLockout);
   }
   public void climberAway() {
-    System.out.println("******************** CLIMBER AWAY ***********************");
-    // setPosition(ClimberSetpoints.kAway);
+    setPosition(ClimberSetpoints.kAway);
   }
   public void climberDoStop() {
     m_climberMotor.stopMotor();

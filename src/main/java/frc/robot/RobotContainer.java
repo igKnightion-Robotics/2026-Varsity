@@ -154,7 +154,7 @@ public class RobotContainer {
       new JoystickButton(rightController,6)
         .onTrue(Commands.parallel(
           m_intake.stowFlipper(),
-          Commands.sequence(Commands.waitSeconds(0.5),
+          Commands.sequence(Commands.waitSeconds(1.5),
                             m_climber.climberLockout())));
 
       new JoystickButton(rightController,5)
