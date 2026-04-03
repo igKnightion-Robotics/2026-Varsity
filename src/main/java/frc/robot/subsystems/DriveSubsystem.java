@@ -132,7 +132,12 @@ public class DriveSubsystem extends SubsystemBase {
       },
       this // Reference to this subsystem to set requirements
     );
-
+    if (Constants.isBlueAlliance.get()) {
+      resetPose(FieldConstants.kBlueResetPose);
+    } else {
+      resetPose(FieldConstants.kRedResetPose);
+    }
+    
     // resetPose(new Pose2d(13.549, 4.080, Rotation2d.k180deg));
   }
 
