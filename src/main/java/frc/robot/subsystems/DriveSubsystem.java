@@ -16,6 +16,7 @@ import com.studica.frc.Navx;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -166,7 +167,6 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
     boolean doRejectUpdate = false;
-    Rotation2d currentAngle = Constants.isBlueAlliance.get() ? getAngle() : getAngle().plus(Rotation2d.k180deg);
     double yawRate = m_gyro.getAngularVel()[2].in(DegreesPerSecond);
     LimelightHelpers.SetRobotOrientation("limelight-shooter", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
@@ -180,6 +180,14 @@ public class DriveSubsystem extends SubsystemBase {
     if(megaTag2.tagCount == 0 ){
       doRejectUpdate = true;
     }
+    if (!MathUtil.isNear(
+      m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+      megaTag2.pose.getRotation().getDegrees(),
+      5.0,
+      0,
+      360)) {
+        doRejectUpdate = true;
+      }
     if(!doRejectUpdate && Constants.isBlueAlliance.get()){
       m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
       m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);

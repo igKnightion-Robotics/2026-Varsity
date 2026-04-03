@@ -146,8 +146,6 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.08;
-
-    public static final double kTwistDeadband = 0.25;
   }
 
   public static final class AutoConstants {
