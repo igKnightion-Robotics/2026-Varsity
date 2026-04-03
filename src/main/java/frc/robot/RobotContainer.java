@@ -157,14 +157,14 @@ public class RobotContainer {
       new JoystickButton(leftController, 6)
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
-      new JoystickButton(rightController,6)
-        .onTrue(Commands.runOnce(m_climber::climberPull));
+      // new JoystickButton(rightController,6)
+      //   .onTrue(Commands.runOnce(m_climber::climberPull));
 
-      new JoystickButton(rightController,5)
-        .onTrue(Commands.runOnce(m_climber::climberStow));
+      // new JoystickButton(rightController,5)
+      //   .onTrue(Commands.runOnce(m_climber::climberStow));
 
-      new JoystickButton(rightController, 12)
-        .toggleOnTrue(Commands.runOnce(m_climber::climberStop));
+      // new JoystickButton(rightController, 12)
+      //   .toggleOnTrue(Commands.runOnce(m_climber::climberStop));
 
   }
   /**
