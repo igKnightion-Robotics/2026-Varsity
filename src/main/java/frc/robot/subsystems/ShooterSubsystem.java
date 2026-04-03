@@ -71,6 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftRollerMotor = new SparkFlex(ShooterConstants.kLeftRollerCanId, SparkFlex.MotorType.kBrushless);
     SparkFlexConfig leftRollerConfig = new SparkFlexConfig();
     leftRollerConfig.idleMode(IdleMode.kCoast);
+    leftRollerConfig.smartCurrentLimit(40);
 
     m_leftRollerMotor.configure(
       leftRollerConfig,
@@ -81,6 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_rightRollerMotor = new SparkFlex(ShooterConstants.kRightRollerCanId, SparkFlex.MotorType.kBrushless);
     SparkFlexConfig rightRollerConfig = new SparkFlexConfig();
     rightRollerConfig.idleMode(IdleMode.kCoast);
+    rightRollerConfig.smartCurrentLimit(40);
     rightRollerConfig.follow(m_leftRollerMotor, true);
 
     m_rightRollerMotor.configure(
@@ -132,7 +134,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
 
-    public Command reverseShooterAndAgitate() {
+  public Command reverseShooterAndAgitate() {
     return this.startEnd(
       () -> {
         this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed);
@@ -147,9 +149,22 @@ public class ShooterSubsystem extends SubsystemBase {
     );
   }
 
+  public Command reverseShooterAndAgitateInAuto() {
+    return this.startEnd(
+      () -> {
+        this.setShooterSpeed(ShooterConstants.kReverseShooterSpeed);
+        this.setAgitatorSpeed(ShooterConstants.kReverseAgitatorSpeed);
+      },
+      () -> {
+        this.m_shooterLeftMotor.stopMotor();
+        this.m_AgitatorMotor.stopMotor();
+      }
+    );
+  }
+
   public Command rangedShooting(DriveSubsystem drive) {
     return Commands.sequence(
-      this.run(() -> { 
+      this.run(() -> {
         double distanceToTarget = drive.distanceToTarget(Constants.isBlueAlliance.get() ? Constants.FieldConstants.kBlueHubLocation : Constants.FieldConstants.kRedHubLocation);
         SmartDashboard.putNumber("Distance to Hub", distanceToTarget);
         double desiredShooterSpeed = FlywheelLookup.getRpmForDistance(distanceToTarget);

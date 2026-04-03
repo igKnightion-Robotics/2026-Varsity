@@ -64,7 +64,7 @@ public class RobotContainer {
      // Register Named Commands
     // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
       NamedCommands.registerCommand("runShooter", m_shooter.rangedShooting(m_robotDrive));
-      NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
+      NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitateInAuto());
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
@@ -95,7 +95,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(rightController.getZ(), OIConstants.kTwistDeadband),
+                -MathUtil.applyDeadband(rightController.getX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
 

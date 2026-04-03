@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ClimberSetpoints;
-import frc.robot.Constants.IntakeSetpoints;
 
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -36,7 +35,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberConfig.idleMode(IdleMode.kBrake);
     climberConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     climberConfig.closedLoop.pid(0.1, 0.0, 0.0);
-    climberConfig.closedLoop.outputRange(-1, 1);
+    climberConfig.closedLoop.outputRange(0, 1);
 
     climberConfig.softLimit.forwardSoftLimit(0.8);
     climberConfig.softLimit.forwardSoftLimitEnabled(true);

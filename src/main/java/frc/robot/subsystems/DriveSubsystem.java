@@ -133,7 +133,7 @@ public class DriveSubsystem extends SubsystemBase {
       this // Reference to this subsystem to set requirements
     );
 
-    resetPose(new Pose2d(13.549, 4.080, Rotation2d.k180deg));
+    // resetPose(new Pose2d(13.549, 4.080, Rotation2d.k180deg));
   }
 
   @Override
@@ -149,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_limeLightAimPidController.setTolerance(aimingTolerance);
 
     LimelightHelpers.SetIMUMode("limelight-shooter", 4);
-    
+
     // Update the odometry in the periodic block
     m_poseEstimator.update(
       getAngle(),
