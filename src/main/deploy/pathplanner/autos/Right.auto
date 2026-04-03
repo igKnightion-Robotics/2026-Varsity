@@ -154,12 +154,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "climberPull"
-                }
-              },
-              {
                 "type": "race",
                 "data": {
                   "commands": [

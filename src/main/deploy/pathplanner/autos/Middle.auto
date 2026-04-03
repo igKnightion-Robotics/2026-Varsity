@@ -238,12 +238,6 @@
               }
             ]
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climberPull"
-          }
         }
       ]
     }
