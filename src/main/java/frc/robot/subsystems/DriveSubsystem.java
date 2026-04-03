@@ -304,6 +304,16 @@ public class DriveSubsystem extends SubsystemBase {
   public Command setXCommand() {
     return this.run(this::setX);
   }
+  
+  public Command resetToKnownPose() {
+    return this.runOnce(() -> {
+      if (Constants.isBlueAlliance.get()){
+        resetPose(FieldConstants.kBlueResetPose);
+      } else {
+        resetPose(FieldConstants.kRedResetPose);
+      }
+    });
+  }
 
   /**
    * Sets the swerve ModuleStates.

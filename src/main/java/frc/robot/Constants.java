@@ -106,7 +106,7 @@ public final class Constants {
     public static final double kClimberSmartCurrentLimit = 80;
   }
   public static final class ClimberSetpoints {
-    public static final double kLockout = 0.85;
+    public static final double kLockout = 0.9; //0.85 before
     // public static final double kRaise = ; //these are just placeholders, will need to be tuned
     public static final double kAway = 0.03;
   }
@@ -115,6 +115,9 @@ public final class Constants {
     public static final Pose2d kBlueHubLocation = new Pose2d(4.626, 4.034536, new Rotation2d());
     public static final Pose2d kRedHubLocation = new Pose2d(11.833, 4.034536, new Rotation2d());
     public static final double kFieldLength = 16.4592; // meters
+    public static final Pose2d kBlueResetPose = new Pose2d(3.300, 4.035, new Rotation2d());
+    public static final Pose2d kRedResetPose = new Pose2d(13.308, 4.035, Rotation2d.k180deg);
+
   }
 
  // Joystick Deadband

@@ -64,7 +64,7 @@ public class RobotContainer {
      // Register Named Commands
     // NamedCommands.registerCommand("autoBalance", m_robotDrive.run(() -> m_robotDrive.setX()));
       NamedCommands.registerCommand("runShooter", m_shooter.rangedShooting(m_robotDrive));
-      NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitateInAuto());
+      NamedCommands.registerCommand("reverseShooter", m_shooter.reverseShooterAndAgitate());
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
@@ -151,7 +151,7 @@ public class RobotContainer {
       new JoystickButton(leftController, 6)
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
-      new JoystickButton(rightController,6)
+      new JoystickButton(leftController,5)
         .onTrue(Commands.parallel(
           m_intake.stowFlipper(),
           Commands.sequence(Commands.waitSeconds(1.5),
@@ -159,6 +159,9 @@ public class RobotContainer {
 
       new JoystickButton(rightController,5)
         .onTrue(m_climber.climberStow());
+
+      new JoystickButton(leftController, 11)
+        .onTrue(m_robotDrive.resetToKnownPose());
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

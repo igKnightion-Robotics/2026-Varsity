@@ -5,25 +5,45 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "race",
                 "data": {
-                  "pathName": "Simple Right"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Simple Right"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "feed"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "feed"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "reverseShooter"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "reverseShooter"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    }
+                  ]
                 }
               }
             ]

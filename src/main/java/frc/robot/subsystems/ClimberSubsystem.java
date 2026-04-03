@@ -35,7 +35,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberConfig.idleMode(IdleMode.kBrake);
     climberConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     climberConfig.closedLoop.pid(6.0, 0.0, 0.0);
-    climberConfig.closedLoop.outputRange(0, 1);
+    climberConfig.closedLoop.outputRange(-1, 1);
 
     //added via ChatGPT so not sure about this
 
