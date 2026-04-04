@@ -40,7 +40,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 4.0
                       }
                     }
                   ]
@@ -82,7 +82,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 6.0
+                              "waitTime": 10.0
                             }
                           }
                         ]
@@ -98,7 +98,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 5.0
                       }
                     },
                     {
@@ -133,19 +133,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "stopDrive"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "runShooter"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "stowFlipper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopDrive"
                 }
               }
             ]

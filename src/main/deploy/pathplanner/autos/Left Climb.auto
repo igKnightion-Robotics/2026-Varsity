@@ -15,7 +15,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Simple Right"
+                        "pathName": "Simple Left"
                       }
                     },
                     {
@@ -127,22 +127,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stowFlipper"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopDrive"
-                }
-              }
-            ]
+            "pathName": "Left Climb 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climberPull"
           }
         }
       ]

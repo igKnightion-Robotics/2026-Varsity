@@ -127,22 +127,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stowFlipper"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopDrive"
-                }
-              }
-            ]
+            "pathName": "Right Climb 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climberPull"
           }
         }
       ]

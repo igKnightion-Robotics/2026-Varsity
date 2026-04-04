@@ -72,7 +72,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
 
-      // NamedCommands.registerCommand("climberRaise", m_climber.climberRaise());
       NamedCommands.registerCommand("climberPull", m_climber.climberLockout());
       NamedCommands.registerCommand("climberStow", m_climber.climberStow());
       //have to be added to pathplanner still
