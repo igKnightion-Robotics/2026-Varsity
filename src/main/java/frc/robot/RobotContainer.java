@@ -68,7 +68,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("dropFlipper", m_intake.dropFlipper().withTimeout(3.0));
       NamedCommands.registerCommand("runIntake", m_intake.runIntake());
       NamedCommands.registerCommand("stowFlipper", m_intake.stowFlipper());
-      NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }).withTimeout(2.0));
+      NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }));
       NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
 

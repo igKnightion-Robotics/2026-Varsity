@@ -23,24 +23,11 @@
                       "data": {
                         "name": "feed"
                       }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
+                    },
                     {
                       "type": "named",
                       "data": {
                         "name": "reverseShooter"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 4.0
                       }
                     }
                   ]
@@ -50,7 +37,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -82,7 +69,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 10.0
+                              "waitTime": 5.0
                             }
                           }
                         ]
@@ -98,26 +85,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 5.0
+                        "waitTime": 2.0
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "stowFlipper"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.0
-                            }
-                          }
-                        ]
+                        "name": "stowFlipper"
                       }
                     }
                   ]
