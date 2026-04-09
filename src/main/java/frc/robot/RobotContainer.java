@@ -16,7 +16,6 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -71,7 +70,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }));
       NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
-
       NamedCommands.registerCommand("climberPull", m_climber.climberLockout());
       NamedCommands.registerCommand("climberStow", m_climber.climberStow());
       //have to be added to pathplanner still
@@ -101,7 +99,6 @@ public class RobotContainer {
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
       m_climber.setDefaultCommand(m_climber.climberStop());
-
     }
 
     public void teleopInit(){
@@ -125,18 +122,17 @@ public class RobotContainer {
 
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
-        .whileTrue(m_shooter.rangedShooting(m_robotDrive));
+        .whileTrue(m_shooter
+                    .rangedShooting(m_robotDrive)
+                    .alongWith(m_robotDrive.targetTrack(
+                      () -> { return -MathUtil.applyDeadband(leftController.getY() * 0.3, OIConstants.kDriveDeadband); },
+                      () -> { return -MathUtil.applyDeadband(leftController.getX() * 0.3, OIConstants.kDriveDeadband);})));
 
       new JoystickButton(leftController, 1)
         .whileTrue(m_intake.runIntakeAndDropFlipper());
 
       new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
-
-      new JoystickButton(rightController, 4)
-        .whileTrue( m_robotDrive.targetTrack(
-            () -> { return -MathUtil.applyDeadband(leftController.getY(), OIConstants.kDriveDeadband); },
-            () -> { return -MathUtil.applyDeadband(leftController.getX(), OIConstants.kDriveDeadband);}));
 
       new JoystickButton(leftController, 4)
         .toggleOnTrue(m_intake.stowFlipper());
@@ -151,13 +147,14 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
       new JoystickButton(leftController,5)
-        .onTrue(Commands.parallel(
+        .onTrue(Commands.sequence(
           m_intake.stowFlipper(),
-          Commands.sequence(Commands.waitSeconds(1.5),
-                            m_climber.climberLockout())));
+          m_climber.climberLockout()));
 
       new JoystickButton(rightController,5)
-        .onTrue(m_climber.climberStow());
+        .onTrue(Commands.sequence(
+          m_intake.stowFlipper(),
+          m_climber.climberStow()));
 
       new JoystickButton(leftController, 11)
         .onTrue(m_robotDrive.resetToKnownPose());

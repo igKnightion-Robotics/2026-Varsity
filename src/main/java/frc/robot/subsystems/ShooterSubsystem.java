@@ -114,6 +114,13 @@ public class ShooterSubsystem extends SubsystemBase {
   //     m_topAgitatorMotor::stopMotor);
   // }
 
+  public Command agitate() {
+    return this.run(() -> { this.setLeftRollerSpeed(ShooterConstants.kLeftRollerSpeed); });
+  }
+
+  public Command stopAgitator() {
+    return this.runOnce(m_leftRollerMotor::stopMotor);
+  }
 
   public Command runShooterAndAgitate() {
     return Commands.sequence(
@@ -127,7 +134,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command stopShooterAndAgitator() {
-    return this.run(() -> {
+    return this.runOnce(() -> {
       this.m_shooterLeftMotor.stopMotor();
       this.m_AgitatorMotor.stopMotor();
       this.m_leftRollerMotor.stopMotor();});
@@ -172,6 +179,9 @@ public class ShooterSubsystem extends SubsystemBase {
       this.run(() -> {
         double distanceToTarget = drive.distanceToTarget(Constants.isBlueAlliance.get() ? Constants.FieldConstants.kBlueHubLocation : Constants.FieldConstants.kRedHubLocation);
         if  (distanceToTarget >= 1.967) {
+          SmartDashboard.putNumber("Distance to Hub", distanceToTarget);
+          double desiredShooterSpeed = FlywheelLookup.getRpmForDistance(distanceToTarget);
+          this.setShooterSpeed(desiredShooterSpeed);
           this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);
           this.setLeftRollerSpeed(ShooterConstants.kLeftRollerSpeed);
         }

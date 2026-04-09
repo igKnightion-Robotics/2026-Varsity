@@ -12,12 +12,12 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeSetpoints;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 
@@ -53,6 +53,8 @@ public class IntakeSubsystem extends SubsystemBase {
     // PID values (starting values)
     flipperConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     flipperConfig.closedLoop.pid(3.0, 0.0, 0.0);
+    flipperConfig.closedLoop.allowedClosedLoopError(0.035, ClosedLoopSlot.kSlot0);
+    flipperConfig.smartCurrentLimit(30);
     // flipperConfig.closedLoop.allowedClosedLoopError(0.002, ClosedLoopSlot.kSlot0);
 
     // Optional: limit output for safety
@@ -67,7 +69,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_flipperAbsEncoder = m_flipperMotor.getAbsoluteEncoder();
 
     SmartDashboard.putNumber("Flipper Angle", m_flipperAbsEncoder.getPosition());
-    SmartDashboard.putBoolean("Flipper At Setpoint", isFlipperDown());
+    SmartDashboard.putBoolean("Flipper At Setpoint", atStowPosition() || atDroppedPosition());
 
     setPosition(IntakeSetpoints.kStow);
   }
@@ -105,7 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
     return this.startEnd(
       this::feedFlipper,
       () -> { this.m_flipperMotor.stopMotor(); }
-    ).until(this::isFlipperDown);
+    ).until(this::atDroppedPosition);
   }
 
   public void setPosition(double position) {
@@ -116,12 +118,15 @@ public class IntakeSubsystem extends SubsystemBase {
     setPosition(IntakeSetpoints.kFeeding);
   }
 
-  public boolean isFlipperDown(){
-    return m_flipperPidController.isAtSetpoint();
+  public boolean atStowPosition() {
+    return Math.abs(m_flipperAbsEncoder.getPosition() - IntakeSetpoints.kStow) <= 0.035;
+  }
+  public boolean atDroppedPosition() {
+    return Math.abs(m_flipperAbsEncoder.getPosition() - IntakeSetpoints.kFeeding) <= 0.035;
   }
 
   public Command stowFlipper() {
-    return this.run(() -> setPosition(IntakeSetpoints.kStow));
+    return this.run(() -> setPosition(IntakeSetpoints.kStow)).until(this::atStowPosition);
   }
 
   @Override
@@ -129,6 +134,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flipper Angle", m_flipperAbsEncoder.getPosition());
     SmartDashboard.putNumber("Flipper Commanded Angle", m_flipperPidController.getSetpoint());
-    SmartDashboard.putBoolean("Flipper At Setpoint", isFlipperDown());
+    SmartDashboard.putBoolean("Flipper At Setpoint", atStowPosition() || atDroppedPosition());
+    SmartDashboard.putNumber("Flipper Current Amps", m_flipperMotor.getOutputCurrent());
   }
 }

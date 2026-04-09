@@ -188,7 +188,7 @@ public class DriveSubsystem extends SubsystemBase {
       360)) {
         doRejectUpdate = true;
       }
-    if(!doRejectUpdate && Constants.isBlueAlliance.get()){
+    if(!doRejectUpdate){
       m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
       m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
     }
