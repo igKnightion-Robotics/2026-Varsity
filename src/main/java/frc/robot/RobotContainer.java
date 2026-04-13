@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,10 +16,14 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 //import frc.robot.Constants.IntakeSetpoints;
 
@@ -44,7 +49,9 @@ public class RobotContainer {
   // Controller
   public static final Joystick leftController = new Joystick(1);
   public static final Joystick rightController = new Joystick(0);
+  public static final Joystick buttonBox = new Joystick(2);
 
+  private final LEDSubsystem m_ledSubsystem = new LEDSubsystem();
   public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
   public static final IntakeSubsystem m_intake = new IntakeSubsystem();
   public static final ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -99,6 +106,8 @@ public class RobotContainer {
       m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
       m_climber.setDefaultCommand(m_climber.climberStop());
+      m_ledSubsystem.setDefaultCommand(m_ledSubsystem.rainbowChase());
+
     }
 
     public void teleopInit(){
@@ -143,8 +152,8 @@ public class RobotContainer {
       new JoystickButton(leftController, 3)
         .whileTrue(m_robotDrive.setXCommand());
 
-      new JoystickButton(leftController, 6)
-        .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
+      // new JoystickButton(buttonBox,  1)
+      //   .onTrue(Commands.runOnce(m_robotDrive::zeroHeading).ignoringDisable(true).withName("zeroGyro"));
 
       new JoystickButton(leftController,5)
         .onTrue(Commands.sequence(
@@ -156,8 +165,81 @@ public class RobotContainer {
           m_intake.stowFlipper(),
           m_climber.climberStow()));
 
-      new JoystickButton(leftController, 11)
+      new JoystickButton(buttonBox, 2)
         .onTrue(m_robotDrive.resetToKnownPose());
+
+      new JoystickButton(buttonBox, 11)
+        .onTrue(Commands.runOnce(() -> {
+          HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue));
+        }));
+
+      new JoystickButton(buttonBox, 8)
+        .onTrue(Commands.runOnce(() -> {
+          HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red));
+        }));
+
+      new Trigger(RobotState::isDisabled)
+        .whileTrue(m_ledSubsystem.blinkYellow());
+
+      new Trigger(() -> {
+        return (
+          RobotState.isAutonomous()
+          && RobotState.isEnabled()
+        );
+      })
+        .whileTrue(m_ledSubsystem.purple());
+
+      new Trigger(() -> {
+        return (
+          HubShiftUtil.getOfficialShiftInfo().remainingTime() < 7.0
+          && RobotState.isTeleop()
+          && RobotState.isEnabled()
+          && HubShiftUtil.getOfficialShiftInfo().currentShift() != HubShiftUtil.ShiftEnum.ENDGAME
+          && HubShiftUtil.getOfficialShiftInfo().currentShift() != HubShiftUtil.ShiftEnum.TRANSITION
+        );})
+        .whileTrue(m_ledSubsystem.flashShift());
+
+      new Trigger(() -> {
+        return (
+          HubShiftUtil.getOfficialShiftInfo().remainingTime() >= 7.0
+          && RobotState.isTeleop()
+          && RobotState.isEnabled()
+          && HubShiftUtil.getOfficialShiftInfo().currentShift() != HubShiftUtil.ShiftEnum.TRANSITION
+          && HubShiftUtil.getOfficialShiftInfo().currentShift() != HubShiftUtil.ShiftEnum.ENDGAME
+        );})
+        .whileTrue(m_ledSubsystem.off().repeatedly());
+
+      new Trigger(() -> {
+        return (
+          RobotState.isTeleop()
+          && RobotState.isEnabled()
+          && HubShiftUtil.getOfficialShiftInfo().remainingTime() <= 35.0  // HubShiftUtil is 5 seconds offset from FMS when endgame is reached
+        );})
+        .whileTrue(m_ledSubsystem.rainbowChase());
+
+      new Trigger(() -> {
+        return (
+          HubShiftUtil.getOfficialShiftInfo().remainingTime() <= 17.0  // HubShiftUtil is 5 seconds offset from FMS when endgame is reached
+          && RobotState.isTeleop()
+          && RobotState.isEnabled()
+          && HubShiftUtil.getOfficialShiftInfo().currentShift() == HubShiftUtil.ShiftEnum.ENDGAME
+        );})
+        .whileTrue(m_ledSubsystem.flashGreen().alongWith(Commands.print("Green in Endgame")));
+
+      new Trigger(() -> {
+        return (
+          HubShiftUtil.getOfficialShiftInfo().currentShift() == HubShiftUtil.ShiftEnum.TRANSITION
+          && HubShiftUtil.getFirstActiveAlliance() == Alliance.Blue
+        );})
+        .whileTrue(m_ledSubsystem.flashBlue());
+
+      new Trigger(() -> {
+        return (
+          HubShiftUtil.getOfficialShiftInfo().currentShift() == HubShiftUtil.ShiftEnum.TRANSITION
+          && HubShiftUtil.getFirstActiveAlliance() == Alliance.Red
+        );})
+        .whileTrue(m_ledSubsystem.flashRed());
+
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
