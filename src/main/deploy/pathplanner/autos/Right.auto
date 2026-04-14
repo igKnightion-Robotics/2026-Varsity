@@ -5,52 +5,65 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right1"
+                  "pathName": "Right 1"
                 }
               },
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "feed"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "reverseShooter"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "feed"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Right 2"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "targetTrack"
-                }
-              },
               {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 0.5
+                        "name": "targetTrack"
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "race",
                       "data": {
                         "commands": [
                           {
@@ -62,16 +75,36 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 5.0
+                              "waitTime": 6.0
                             }
                           }
                         ]
                       }
-                    },
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
                     {
-                      "type": "named",
+                      "type": "race",
                       "data": {
-                        "name": "stowFlipper"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stowFlipper"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 2.0
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -100,104 +133,28 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Right2"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right3"
+                  "pathName": "Right 3"
                 }
               },
               {
-                "type": "race",
+                "type": "wait",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 5.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "feed"
-                      }
-                    }
-                  ]
+                  "waitTime": 3.5
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right 4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 5"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "runShooter"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 6.0
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stowFlipper"
-                }
-              },
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "runShooter"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 4.0
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "name": "climberPull"
           }
         }
       ]
