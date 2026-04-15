@@ -84,6 +84,19 @@ public class IntakeSubsystem extends SubsystemBase {
       () -> this.setIntakeSpeed(0));
   }
 
+  public Command runIntakeWhileStowed() {
+    return this.startEnd(
+      () -> {
+        this.setIntakeSpeed(IntakeConstants.kIntakeSpeed);
+        setPosition(IntakeSetpoints.kStow);
+      },
+      () -> {
+        this.setIntakeSpeed(0);
+        this.m_flipperMotor.stopMotor();
+      }
+    );
+  }
+
   public Command runIntakeAndDropFlipper() {
     return this.startEnd(
       () -> {

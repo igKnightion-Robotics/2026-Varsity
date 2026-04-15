@@ -77,8 +77,8 @@ public class RobotContainer {
       NamedCommands.registerCommand("targetTrack", m_robotDrive.targetTrack(() -> { return 0; }, () -> { return 0; }));
       NamedCommands.registerCommand("stopDrive", new RunCommand(() -> { m_robotDrive.drive(0, 0, 0, false); }, m_robotDrive));
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
-      NamedCommands.registerCommand("climberPull", m_climber.climberLockout());
-      NamedCommands.registerCommand("climberStow", m_climber.climberStow());
+      NamedCommands.registerCommand("climberPull", Commands.sequence(m_intake.stowFlipper(), m_climber.climberLockout()));
+      NamedCommands.registerCommand("climberStow", Commands.sequence(m_intake.stowFlipper(), m_climber.climberStow()));
       //have to be added to pathplanner still
 
       // Do all other initialization
@@ -107,7 +107,6 @@ public class RobotContainer {
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
       m_climber.setDefaultCommand(m_climber.climberStop());
       m_ledSubsystem.setDefaultCommand(m_ledSubsystem.rainbowChase());
-
     }
 
     public void teleopInit(){
@@ -138,13 +137,16 @@ public class RobotContainer {
                       () -> { return -MathUtil.applyDeadband(leftController.getX() * 0.3, OIConstants.kDriveDeadband);})));
 
       new JoystickButton(leftController, 1)
-        .whileTrue(m_intake.runIntakeAndDropFlipper());
+        .whileTrue(Commands.either(
+          m_intake.runIntakeWhileStowed(),
+          m_intake.runIntakeAndDropFlipper(),
+          () -> { return rightController.getRawButton(1); }));
 
       new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
 
       new JoystickButton(leftController, 4)
-        .toggleOnTrue(m_intake.stowFlipper());
+        .toggleOnTrue(m_intake.stowFlipper().repeatedly());
 
       new JoystickButton(leftController, 2)
         .whileTrue(m_intake.reverseIntake());

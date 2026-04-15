@@ -36,7 +36,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.0; //4.8 before
+    public static final double kMaxSpeedMetersPerSecond = 3.0; //4.8 before
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
@@ -115,9 +115,8 @@ public final class Constants {
     public static final Pose2d kBlueHubLocation = new Pose2d(4.626, 4.034536, new Rotation2d());
     public static final Pose2d kRedHubLocation = new Pose2d(11.833, 4.034536, new Rotation2d());
     public static final double kFieldLength = 16.4592; // meters
-    public static final Pose2d kBlueResetPose = new Pose2d(3.300, 4.035, new Rotation2d());
+    public static final Pose2d kBlueResetPose = new Pose2d(3.300, 4.035, Rotation2d.kZero);
     public static final Pose2d kRedResetPose = new Pose2d(13.308, 4.035, Rotation2d.k180deg);
-
   }
 
  // Joystick Deadband

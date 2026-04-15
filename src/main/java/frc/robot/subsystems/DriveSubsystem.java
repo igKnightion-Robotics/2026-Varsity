@@ -19,7 +19,6 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -30,7 +29,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -153,6 +151,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_limeLightAimPidController.setI(aimingKI);
     m_limeLightAimPidController.setD(aimingKD);
     m_limeLightAimPidController.setTolerance(aimingTolerance);
+
+    SmartDashboard.putNumber("Distance To Hub", distanceToTarget(Constants.isBlueAlliance.get() ? FieldConstants.kBlueHubLocation : FieldConstants.kRedHubLocation));
 
     LimelightHelpers.SetIMUMode("limelight-shooter", 4);
 
