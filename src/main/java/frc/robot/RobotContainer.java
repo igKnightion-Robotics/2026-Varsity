@@ -130,11 +130,7 @@ public class RobotContainer {
 
       //Shooter Buttons and Intake Buttons
       new JoystickButton(rightController, 1)
-        .whileTrue(m_shooter
-                    .rangedShooting(m_robotDrive)
-                    .alongWith(m_robotDrive.targetTrack(
-                      () -> { return -MathUtil.applyDeadband(leftController.getY() * 0.3, OIConstants.kDriveDeadband); },
-                      () -> { return -MathUtil.applyDeadband(leftController.getX() * 0.3, OIConstants.kDriveDeadband);})));
+        .whileTrue(m_shooter.rangedShooting(m_robotDrive));
 
       new JoystickButton(leftController, 1)
         .whileTrue(Commands.either(
@@ -144,6 +140,11 @@ public class RobotContainer {
 
       new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
+
+      new JoystickButton(rightController, 4)
+        .whileTrue(m_robotDrive.targetTrack(
+              () -> { return -MathUtil.applyDeadband(leftController.getY() * 0.3, OIConstants.kDriveDeadband); },
+              () -> { return -MathUtil.applyDeadband(leftController.getX() * 0.3, OIConstants.kDriveDeadband);}));
 
       new JoystickButton(leftController, 4)
         .toggleOnTrue(m_intake.stowFlipper().repeatedly());
@@ -215,13 +216,13 @@ public class RobotContainer {
         return (
           RobotState.isTeleop()
           && RobotState.isEnabled()
-          && HubShiftUtil.getOfficialShiftInfo().remainingTime() <= 35.0  // HubShiftUtil is 5 seconds offset from FMS when endgame is reached
+          && HubShiftUtil.getOfficialShiftInfo().remainingTime() <= 30.0  // HubShiftUtil is 5 seconds offset from FMS when endgame is reached
         );})
         .whileTrue(m_ledSubsystem.rainbowChase());
 
       new Trigger(() -> {
         return (
-          HubShiftUtil.getOfficialShiftInfo().remainingTime() <= 17.0  // HubShiftUtil is 5 seconds offset from FMS when endgame is reached
+          HubShiftUtil.getOfficialShiftInfo().remainingTime() <= 12.0  // HubShiftUtil is 5 seconds offset from FMS when endgame is reached
           && RobotState.isTeleop()
           && RobotState.isEnabled()
           && HubShiftUtil.getOfficialShiftInfo().currentShift() == HubShiftUtil.ShiftEnum.ENDGAME
