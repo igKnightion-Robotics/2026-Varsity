@@ -125,7 +125,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public Command runShooterAndAgitate() {
     return Commands.sequence(
-      this.run(() -> {this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed);}).withTimeout(0.5),
+      this.run(() -> {this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed);}).withTimeout(0.75),
       this.run(() -> {
         this.setShooterSpeed(ShooterConstants.kShooterLeftSpeed);
         this.setAgitatorSpeed(ShooterConstants.kAgitatorSpeed);

@@ -74,7 +74,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kShooterRightCanId = 18;
     public static final int kShooterLeftCanId = 22;
-    public static final double kShooterLeftSpeed = 3800;
+    public static final double kShooterLeftSpeed = 3650.0;
     public static final int kAgitatorCanId = 21;
     public static final double kAgitatorSpeed = -1.0;
     public static final int kRightRollerCanId = 30;

@@ -136,7 +136,7 @@ public class RobotContainer {
         .whileTrue(Commands.either(
           m_intake.runIntakeWhileStowed(),
           m_intake.runIntakeAndDropFlipper(),
-          () -> { return rightController.getRawButton(1); }));
+          () -> { return rightController.getRawButton(1) || rightController.getRawButton(6); }));
 
       new JoystickButton(rightController, 3)
         .whileTrue(m_shooter.reverseShooterAndAgitate());
@@ -168,7 +168,7 @@ public class RobotContainer {
           m_intake.stowFlipper(),
           m_climber.climberStow()));
 
-      new JoystickButton(buttonBox, 2)
+      new JoystickButton(buttonBox, 10)
         .onTrue(m_robotDrive.resetToKnownPose());
 
       new JoystickButton(buttonBox, 11)
@@ -180,6 +180,9 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> {
           HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red));
         }));
+
+      new JoystickButton(rightController, 6)
+        .whileTrue(m_shooter.runShooterAndAgitate());
 
       new Trigger(RobotState::isDisabled)
         .whileTrue(m_ledSubsystem.blinkYellow());

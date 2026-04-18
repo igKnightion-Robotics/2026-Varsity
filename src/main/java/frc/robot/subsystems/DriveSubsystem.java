@@ -16,7 +16,6 @@ import com.studica.frc.Navx;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -37,6 +36,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightVision;
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -64,6 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Navx m_gyro = new Navx(0);
 
   private final Field2d field2d = new Field2d();
+  private final LimelightVision vision = new LimelightVision();
 
   private final SwerveDrivePoseEstimator m_poseEstimator;
 
@@ -166,32 +167,20 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getPosition()
       });
 
-    boolean doRejectUpdate = false;
-    double yawRate = m_gyro.getAngularVel()[2].in(DegreesPerSecond);
-    LimelightHelpers.SetRobotOrientation("limelight-shooter", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-shooter");
-    if (Math.abs(yawRate) > 360) {
-      doRejectUpdate = true;
-    }
-
-    if (megaTag2 == null) {
-      doRejectUpdate = true;
-    }
-    if(megaTag2.tagCount == 0 ){
-      doRejectUpdate = true;
-    }
-    if (!MathUtil.isNear(
-      m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-      megaTag2.pose.getRotation().getDegrees(),
-      5.0,
-      0,
-      360)) {
-        doRejectUpdate = true;
+    var visionEstimate = vision.getAcceptedMt2Pose(
+      getPose().getRotation().getDegrees(),
+      m_gyro.getAngularVel()[2].in(DegreesPerSecond));
+    visionEstimate.ifPresent(est -> {
+      double xyStDev;
+      if(est.tagCount >= 2 ) {
+        xyStDev = 0.1;
       }
-    if(!doRejectUpdate){
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
-      m_poseEstimator.addVisionMeasurement(megaTag2.pose, megaTag2.timestampSeconds);
-    }
+      else {
+        xyStDev = 0.5;
+      }
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStDev, xyStDev,9999999));
+      m_poseEstimator.addVisionMeasurement(est.pose, est.timestampSeconds);
+    });
 
     // adding a field map to the smart dashboard
     field2d.setRobotPose(m_poseEstimator.getEstimatedPosition());

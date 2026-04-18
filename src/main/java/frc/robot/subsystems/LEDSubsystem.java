@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
-  AddressableLED m_led = new AddressableLED(0);
+  AddressableLED m_led = new AddressableLED(1);
   AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(62);
   AddressableLEDBufferView m_leftView = m_ledBuffer.createView(0, 30);
   AddressableLEDBufferView m_rightView = m_ledBuffer.createView(31, 61);
