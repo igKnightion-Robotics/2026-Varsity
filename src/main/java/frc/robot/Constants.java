@@ -108,7 +108,7 @@ public final class Constants {
   public static final class ClimberSetpoints {
     public static final double kLockout = 0.9; //0.85 before
     // public static final double kRaise = ; //these are just placeholders, will need to be tuned
-    public static final double kAway = 0.03;
+    public static final double kAway = 0.04;
   }
 
   public static final class FieldConstants {

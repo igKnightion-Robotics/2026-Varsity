@@ -103,7 +103,7 @@ public class RobotContainer {
                 true),
             m_robotDrive));
 
-      m_intake.setDefaultCommand(m_intake.dropFlipper());
+      m_intake.setDefaultCommand(m_intake.stowFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
       m_climber.setDefaultCommand(m_climber.climberStop());
       m_ledSubsystem.setDefaultCommand(m_ledSubsystem.rainbowChase());
