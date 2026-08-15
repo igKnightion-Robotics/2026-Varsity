@@ -309,12 +309,16 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command resetToKnownPose() {
     return this.runOnce(() -> {
+      this.m_gyro.resetYaw();
       if (Constants.isBlueAlliance.get()){
         resetPose(FieldConstants.kBlueResetPose);
       } else {
         resetPose(FieldConstants.kRedResetPose);
       }
     });
+  }
+  public void resetGyro() {
+    this.m_gyro.resetYaw();
   }
 
   /**

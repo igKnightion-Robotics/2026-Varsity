@@ -79,6 +79,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("feed", m_intake.runIntakeAndDropFlipper());
       NamedCommands.registerCommand("climberPull", Commands.sequence(m_intake.stowFlipper(), m_climber.climberLockout()));
       NamedCommands.registerCommand("climberStow", Commands.sequence(m_intake.stowFlipper(), m_climber.climberStow()));
+      NamedCommands.registerCommand("resetGyro", new RunCommand(m_robotDrive::resetGyro).withTimeout(0.01));
       //have to be added to pathplanner still
 
       // Do all other initialization
@@ -103,7 +104,7 @@ public class RobotContainer {
                 true),
             m_robotDrive));
 
-      m_intake.setDefaultCommand(m_intake.stowFlipper());
+      m_intake.setDefaultCommand(m_intake.dropFlipper());
       m_shooter.setDefaultCommand(m_shooter.stopShooterAndAgitator());
       m_climber.setDefaultCommand(m_climber.climberStop());
       m_ledSubsystem.setDefaultCommand(m_ledSubsystem.rainbowChase());

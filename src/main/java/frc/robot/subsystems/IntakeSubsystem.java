@@ -48,13 +48,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     flipperConfig.idleMode(IdleMode.kBrake);
     flipperConfig.inverted(true);
-    flipperConfig.smartCurrentLimit(40);
 
     // PID values (starting values)
     flipperConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
     flipperConfig.closedLoop.pid(3.0, 0.0, 0.0);
     flipperConfig.closedLoop.allowedClosedLoopError(0.035, ClosedLoopSlot.kSlot0);
-    flipperConfig.smartCurrentLimit(30);
+    flipperConfig.smartCurrentLimit(40);
     // flipperConfig.closedLoop.allowedClosedLoopError(0.002, ClosedLoopSlot.kSlot0);
 
     // Optional: limit output for safety

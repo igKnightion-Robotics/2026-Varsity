@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "resetGyro"
+          }
+        },
+        {
           "type": "sequential",
           "data": {
             "commands": [
@@ -69,7 +75,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 5.0
+                              "waitTime": 7.0
                             }
                           }
                         ]
